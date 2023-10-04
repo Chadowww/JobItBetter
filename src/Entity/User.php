@@ -77,12 +77,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private Collection $searches;
 
+    #[ORM\OneToMany(mappedBy: 'applicant', targetEntity: Alert::class, orphanRemoval: true)]
+    private Collection $alerts;
+
     public function __construct()
     {
         $this->resumes = new ArrayCollection();
         $this->favlist = new ArrayCollection();
         $this->joboffers = new ArrayCollection();
         $this->searches = new ArrayCollection();
+        $this->alerts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -352,5 +356,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getSearches(): Collection
     {
         return $this->searches;
+    }
+
+    /**
+     * @return Collection<int, Alert>
+     */
+    public function getAlerts(): Collection
+    {
+        return $this->alerts;
+    }
+
+    public function addAlert(Alert $alert): static
+    {
+        if (!$this->alerts->contains($alert)) {
+            $this->alerts->add($alert);
+            $alert->setApplicant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlert(Alert $alert): static
+    {
+        if ($this->alerts->removeElement($alert)) {
+            // set the owning side to null (unless already changed)
+            if ($alert->getApplicant() === $this) {
+                $alert->setApplicant(null);
+            }
+        }
+
+        return $this;
     }
 }
