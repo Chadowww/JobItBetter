@@ -52,10 +52,14 @@ class Company
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Search::class)]
     private Collection $searches;
 
+    #[ORM\OneToMany(mappedBy: 'employer', targetEntity: Alert::class, orphanRemoval: true)]
+    private Collection $alerts;
+
     public function __construct()
     {
         $this->joboffers = new ArrayCollection();
         $this->searches = new ArrayCollection();
+        $this->alerts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -209,6 +213,36 @@ class Company
             // set the owning side to null (unless already changed)
             if ($job->getCompany() === $this) {
                 $job->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Alert>
+     */
+    public function getAlerts(): Collection
+    {
+        return $this->alerts;
+    }
+
+    public function addAlert(Alert $alert): static
+    {
+        if (!$this->alerts->contains($alert)) {
+            $this->alerts->add($alert);
+            $alert->setEmployer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlert(Alert $alert): static
+    {
+        if ($this->alerts->removeElement($alert)) {
+            // set the owning side to null (unless already changed)
+            if ($alert->getEmployer() === $this) {
+                $alert->setEmployer(null);
             }
         }
 
