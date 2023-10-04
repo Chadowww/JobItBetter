@@ -6,9 +6,13 @@
         <div class="card-body">
             {% for alert in this.alert %}
                 <div class="d-flex w-100 px-3 justify-content-around">
-                    <h5 class="card-title"></h5>
-                    <p class="card-text">{{ alert.message }}</p>
-                    <a href="#" class="btn btn-primary">
+                    <h5 class="card-title">icone</h5>
+                    <a id="alerte-edit-{{ alert.id }}"
+                        href="{{ path('app_alerte_edit', {'id': alert.id}) }}"
+                       class="{{ app.user.getAlert(alert) ? 'font-weight-bold' : '' }}"
+                       onclick="readAlert(event)"
+                    >
+                        {{ alert.message }}
                         <i class="fas fa-edit"></i>
                     </a>
                 </div>
