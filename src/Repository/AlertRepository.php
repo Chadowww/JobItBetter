@@ -63,4 +63,10 @@ class AlertRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function readed(Alert $alert): void
+    {
+        $alert->setState(false);
+        $this->save($alert, true);
+    }
 }
