@@ -387,4 +387,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    public function getAlert(Alert $alert): bool
+    {
+        return $this->alerts->contains($alert);
+    }
+    public function readAlert(Alert $alert): Alert
+    {
+        return $alert->setState(false);
+    }
 }
