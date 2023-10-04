@@ -1,3 +1,21 @@
 <div{{ attributes }}>
-    <!-- component html -->
+    <div class="card be-card-alerte" style="width: 100%; min-height: 13.75rem;" >
+        <div class="card-header be-alert">
+            Mes Alertes
+        </div>
+        <div class="card-body">
+            {% for alert in this.alert %}
+                <div class="d-flex w-100 px-3 justify-content-around">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text">{{ alert.message }}</p>
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </div>
+                <button type="button" class="be-secondary-button m-auto " data-toggle="modal" data-target="#exampleModal">
+                    Créer une alerte
+                </button>
+            {% endfor %}
+        </div>
+    </div>
 </div>
