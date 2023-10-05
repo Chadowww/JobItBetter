@@ -18,10 +18,11 @@ class SearchOfferType extends AbstractType
             ->add('city', TextType::class, ['required' => false]);
     }
 
-//    public function configureOptions(OptionsResolver $resolver): void
-//    {
-//        $resolver->setDefaults([
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
 //            'data_class' => Joboffer::class,
-//        ]);
-//    }
+            'csrf_protection' => false,
+        ]);
+    }
 }

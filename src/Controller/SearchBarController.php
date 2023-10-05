@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Form\SearchOfferType;
 use App\Repository\JobofferRepository;
 use App\Repository\SearchRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,19 +22,28 @@ class SearchBarController extends AbstractController
         ]);
     }
 
-    #[Route('/search', name: 'app_joboffer_search', methods: ['GET', 'POST'])]
+    #[Route('/search', name: 'app_joboffer_search', methods: ['GET'])]
     public function search(
         FormFactoryInterface $formFactory,
         JobofferRepository $jobofferRepository,
-        Request $request
+        Request $request,
+        PaginatorInterface $paginator
     ): Response {
 
-        $form = $formFactory->create(SearchOfferType::class);
+        $form = $formFactory->create(SearchOfferType::class, null, [
+            'method' => 'GET',
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $credentials = $form->getData();
             $results = $jobofferRepository->search($credentials);
+
+            $results = $paginator->paginate(
+                $results,
+                $request->query->getInt('page', 1),
+                10
+            );
             return $this->render('joboffer/search.html.twig', [
                 'joboffers' => $results,
             ]);
