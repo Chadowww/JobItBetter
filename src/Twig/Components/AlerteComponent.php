@@ -21,10 +21,16 @@ final class AlerteComponent
         $this->alert = $repository;
     }
 
-    public function getAlert(User $applicant): array
+    public function getAlert(int $applicant): array
     {
 
-        return $this->alert->findBy(['applicant' => $applicant]);
+        return $this->alert
+            ->createQueryBuilder('a')
+            ->where('a.applicant = :applicant')
+            ->setParameter('applicant', $applicant)
+            ->orderBy('a.id', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     public function readedAlert(Alert $alert): bool
