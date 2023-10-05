@@ -79,4 +79,8 @@ class Alert
 
         return $this;
     }
+    public function getState(): ?bool
+    {
+        return $this->state;
+    }
 }

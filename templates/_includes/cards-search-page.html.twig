@@ -1,5 +1,5 @@
 {% if is_granted('ROLE_USER') %}
-    {{ component('AlerteComponent') }}
+    {{ component('AlerteComponent', { 'applicant': app.user.id }) }}
     <div class="card be-card-candidatures" style="width: 100%; min-height: 13.75rem;">
         <div class="card-header be-candidature">
             Mes candidatures
