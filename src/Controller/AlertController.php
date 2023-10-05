@@ -27,6 +27,27 @@ class AlertController extends AbstractController
         return $this->json([
             'success' => $user->getAlerts()->contains($alert),
             'state' => $alert->getState(),
+            'id' => $alert->getId(),
+        ]);
+    }
+    #[Route('/{id}/alert/delete', name: 'app_alerte_delete')]
+    public function deleteAlert(Alert $alert, UserRepository $userRepository): Response
+    {
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
+        $alertId = null;
+
+        if ($user->getAlert($alert) === true) {
+            $alertId = $alert->getId();
+            $user->removeAlert($alert);
+        }
+        $userRepository->save($user, true);
+
+        return $this->json([
+            'success' => !$user->getAlerts()->contains($alert),
+            'id' => $alertId,
         ]);
     }
 }
