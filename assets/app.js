@@ -9,7 +9,8 @@
 import './styles/app.scss';
 
 import './js/search_navbar.js';
-
+import './js/favlist.js';
+import './js/alerte.js';
 
 const $ = require('jquery');
 // this "modifies" the jquery module: adding behavior to it
