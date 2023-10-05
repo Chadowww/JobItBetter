@@ -25,7 +25,8 @@ class AlertController extends AbstractController
         $userRepository->save($user, true);
 
         return $this->json([
-            'success' => $user->getAlerts()->contains($alert)
+            'success' => $user->getAlerts()->contains($alert),
+            'state' => $alert->getState(),
         ]);
     }
 }
