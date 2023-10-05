@@ -9,12 +9,13 @@ function readAlert(event)
         .then(res => res.json())
         .then(data => {
             const alertIcon = readlink;
-            if (data.getAlert) {
-                alertIcon.classList.remove("font-weight-bold"); // Remove the .bi-heart (empty heart) from classes in <i> element
-                alertIcon.classList.add("font-weight-light"); // Add the .bi-heart-fill (full heart) from classes in <i>
+            console.log(data);
+            if (data.state === false) {
+                alertIcon.classList.remove("fw-bold"); // Remove the .bi-heart (empty heart) from classes in <i> element
+                alertIcon.classList.add("fw-light"); // Add the .bi-heart-fill (full heart) from classes in <i>
             } else {
-                alertIcon.classList.remove("font-weight-light"); // Remove the .bi-heart-fill (full heart) from classes
-                alertIcon.classList.add("font-weight-bold"); // Add the .bi-heart (empty heart) from classes in <i> element
+                alertIcon.classList.remove("fw-light"); // Remove the .bi-heart (empty heart) from classes in <i> element
+                alertIcon.classList.add("fw-bold"); // Add the .bi-heart-fill (full heart) from classes in <i>
             }
         });
     } catch (err) {
@@ -23,4 +24,4 @@ function readAlert(event)
     }
 }
 
-window.readAlert(readAlert)
+window.readAlert = readAlert;

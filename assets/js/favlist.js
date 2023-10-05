@@ -25,4 +25,4 @@ function addToFavlist(event)
         console.error(err);
     }
 }
-window.addToFavlist(addToFavlist)
+window.addToFavlist = addToFavlist
