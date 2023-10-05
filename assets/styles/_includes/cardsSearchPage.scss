@@ -18,3 +18,10 @@
 .be-container-sidebar{
     width: 30%
 }
+
+.sticky-element {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 150px
+}
+
