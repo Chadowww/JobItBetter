@@ -3,8 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Resume;
+use App\Entity\User;
 use App\Form\ResumeType;
 use App\Repository\ResumeRepository;
+use App\Repository\UserRepository;
+use App\Services\AlertService;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +18,15 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/resume')]
 class ResumeController extends AbstractController
 {
+    private AlertService $alertService;
+    private UserRepository $userRepository;
+
+    public function __construct(AlertService $alertService, UserRepository $userRepository)
+    {
+        $this->alertService = $alertService;
+        $this->userRepository = $userRepository;
+    }
+
     #[Route('/', name: 'app_resume_index', methods: ['GET'])]
     public function index(ResumeRepository $resumeRepository): Response
     {
@@ -82,6 +96,10 @@ class ResumeController extends AbstractController
     #[Route('/{id}/read', name: 'app_resume_read', methods: ['GET'])]
     public function readResume(Resume $resume): bool|int
     {
+        $resumeUser = $this->userRepository->findOneBy(['id' => $resume->getUser()]);
+        if ($resumeUser) {
+            $this->alertService->addAlert($this->getUser(), $resumeUser);
+        }
         $file = $this->getParameter('kernel.project_dir') . '/public/uploads/resume/' . $resume->getPath();
         header('Content-type: application/pdf');
         return readfile($file);
