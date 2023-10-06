@@ -4,15 +4,25 @@ namespace App\Controller;
 
 use App\Entity\Resume;
 use App\Form\ResumeType;
-use App\Repository\ResumeRepository;
+use App\Repository\{ResumeRepository, UserRepository};
+use App\Services\AlertService;
+use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{Request, Response};
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/resume')]
 class ResumeController extends AbstractController
 {
+    private AlertService $alertService;
+    private UserRepository $userRepository;
+
+    public function __construct(AlertService $alertService, UserRepository $userRepository)
+    {
+        $this->alertService = $alertService;
+        $this->userRepository = $userRepository;
+    }
+
     #[Route('/', name: 'app_resume_index', methods: ['GET'])]
     public function index(ResumeRepository $resumeRepository): Response
     {
@@ -79,9 +89,18 @@ class ResumeController extends AbstractController
         return $this->redirectToRoute('app_resume_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    /**
+     * @throws ORMException
+     */
     #[Route('/{id}/read', name: 'app_resume_read', methods: ['GET'])]
     public function readResume(Resume $resume): bool|int
     {
+        $resumeUser = $this->userRepository->findOneBy(['id' => $resume->getUser()]);
+        if ($resumeUser) {
+            $this->alertService->addAlert($this->getUser(), $resumeUser);
+        } else {
+            throw new ORMException('User not found');
+        }
         $file = $this->getParameter('kernel.project_dir') . '/public/uploads/resume/' . $resume->getPath();
         header('Content-type: application/pdf');
         return readfile($file);

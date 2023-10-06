@@ -4,10 +4,13 @@ namespace App\Entity;
 
 use App\Repository\AlertRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\Timestampable;
 
 #[ORM\Entity(repositoryClass: AlertRepository::class)]
 class Alert
 {
+    use Timestampable;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
