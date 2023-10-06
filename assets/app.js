@@ -25,3 +25,15 @@ require('bootstrap');
 import './bootstrap';
 
 import 'bootstrap-icons/font/bootstrap-icons.css';
+
+const parent = document.querySelector('.be-banner-home');
+const enfant = document.querySelector('.be-banner-search');
+
+function ajusterHauteurEnfant()
+{
+    const enfantHeight = enfant.clientHeight;
+    enfant.style.transform = `translateY(${enfantHeight / 2}px) scale(0.9)`;
+}
+
+window.addEventListener('resize', ajusterHauteurEnfant);
+ajusterHauteurEnfant();
