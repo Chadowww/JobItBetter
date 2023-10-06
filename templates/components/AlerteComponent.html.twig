@@ -15,7 +15,7 @@
                        class="{{ alert.getState == true  ? 'fw-bold' : 'fw-fill' }}"
                        onclick="readAlert(event)"
                     >
-                        {{ alert.message }}
+                        {{ alert.employer.name }} {{ alert.message }}
                     </a>
                     <a id="alerte-delete-{{ alert.id }}"
                         href="{{ path('app_alerte_delete', {'id': alert.id}) }}"
