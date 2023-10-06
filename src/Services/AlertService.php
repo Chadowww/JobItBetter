@@ -22,7 +22,7 @@ class AlertService
     {
         $this->alert->setApplicant($resumeUser);
         $this->alert->setEmployer($user->getCompany());
-        $this->alert->setMessage('Votre candidture  été vu');
+        $this->alert->setMessage('a  vu votre candidature.');
         $this->alert->setState(true);
         $this->entityManager->persist($this->alert);
         $this->entityManager->flush();
