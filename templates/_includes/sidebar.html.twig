@@ -1,7 +1,11 @@
-<nav class="navbar bg-body-tertiary fixed-top d-md-none d-lg-none">
+<nav class="be-sidebar-mobile navbar bg-body-tertiary fixed-top d-md-none d-lg-none">
     <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+        <button class="navbar-toggler position-relative p-0 border-0" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
+            <div id="icon-notification-button" class="be-notification position-absolute
+                                                top-0 right-0 d-none"></div>
         </button>
         <a class="navbar-brand m-auto" href="/">
             <img class="be-img-navbar" src="{{ asset('build/images/logo-allonge.png')}}" alt="Mon image">
@@ -97,10 +101,34 @@
                     <hr class="hr">
                     {% if app.user %}
                         <li class="nav-item d-flex justify-content-center align-items-center ">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
-                                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
-                            </svg>
-                            <a class="nav-link mx-2 active text-center fw-bold" aria-current="page" href="#">Vos alertes</a>
+                            <div class="accordion be-no-border" id="accordionExample">
+                                <div class="accordion-item be-no-border">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button be-accordion-button-sidebar" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <div class="w-100 d-flex justify-content-center">
+                                                <a class="nav-link mx-2 active text-center d-block fw-bold position-relative" href="#">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
+                                                        <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+                                                    </svg>
+                                                    <div id="icon-notification" class="be-notification position-absolute
+                                                top-0 right-0 d-none"></div>
+                                                    Vos alertes
+                                                </a>
+                                            </div>
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="be-no-border accordion-collapse collapse"
+                                         aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body ">
+                                            <ul class="be-no-border d-flex flex-column justify-content-center align-items-center">
+                                                {{ component('AlerteComponent', { 'applicant': app.user.id }) }}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                     {% endif %}
                     {% if is_granted('ROLE_USER') and not is_granted('ROLE_COMPANY') %}
