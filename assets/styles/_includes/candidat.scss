@@ -50,12 +50,10 @@
     border-radius: $border-radius;
 }
 
-.be-test {
-    left: 1.5;
-}
 .card-title,
 .card-subtitle {
     margin-top: 10px;
+    font-size: 1.1rem;
 }
 
 @media screen and (max-width: 425px) {
