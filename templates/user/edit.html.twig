@@ -3,10 +3,10 @@
 {% block title %}Mes informations personnelles{% endblock %}
 
 {% block body %}
+<div class="d-flex m-4">
+    <a class="be-secondary-button " href="{{ path('app_user_show', {'id': app.user.id} ) }}">Retour au profil</a>
+</div>
 <div class="be-form row g-3 col-7">
-    <div class="d-flex m-4">
-        <a class="be-secondary-button " href="{{ path('app_user_show', {'id': app.user.id} ) }}">Retour au profil</a>
-    </div>
     <h2 class="be-h2">Mes <span>informations</span></h2>
     {{ form_start(form) }}
     <div class="row px-4">
