@@ -24,6 +24,18 @@
         <main class="d-flex flex-column justify-content-between min-vh-100">
             {% include '_includes/sidebar.html.twig' %}
             {% include '_includes/navbar.html.twig' %}
+            {% if app.request.attributes.get('_route') == 'app_joboffer_search' %}
+                <div class="w-100 mt-5 mt-md-0 d-flex align-items-center justify-content-center
+be-search-div-top">
+                    <div class="w-100 mx-auto">
+                        <div class="navbar be-bg-body-tertiary px-3 mx-auto form-js">
+                            {{ render(controller(
+                                'App\\Controller\\SearchBarController::search',
+                            )) }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
             {% for category, messages in app.flashes %}
                 {% for message in messages %}
                     <div class="alert alert-{{ category }}">

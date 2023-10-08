@@ -5,14 +5,12 @@
         </div>
         <div class="card-body">
             {% for alert in this.alert(app.user.id) | slice(0, 5) %}
-                <div id="alert-{{ alert.id }}" class="d-flex w-100 px-3 justify-content-around align-items-center">
-                    <h5 class="card-title">
+                <div id="alert-{{ alert.id }}" class="d-flex w-100 px-3 justify-content-around">
                         <i  id="eye-{{ alert.id }}"
                             class="bi {{ alert.getState == true ? 'bi-eye-fill' : 'bi-eye-slash'}}"></i>
-                    </h5>
                     <a id="alerte-edit-{{ alert.id }}"
                         href="{{ path('app_alerte_edit', {'id': alert.id}) }}"
-                       class="{{ alert.getState == true  ? 'fw-bold' : 'fw-fill' }}"
+                       class="{{ alert.getState == true  ? 'fw-bold' : 'fw-fill' }} link-alert text-center"
                        onclick="readAlert(event)"
                     >
                         {{ alert.employer.name }} {{ alert.message }}

@@ -4,10 +4,11 @@
 
 {% block body %}
 <div class="container m-auto d-flex justify-content-around align-items-center my-5">
-    <div class="row">
+    <div class="row flex justify-content-center justify-content-lg-between">
         {#Group 1#}
-        <div class="col-lg-4 col-12 order-md-first order-lg-last align-items-center d-flex flex-column">
-            <div class="card example-wrapper be-card-candidate mb-4" style="width: 20rem; height: 21rem;">
+        <div class="col-lg-6 col-12 row  px-md-2 px-xl-4 order-md-first order-lg-last align-items-center d-flex
+        flex-column p-0">
+            <div class="card col-12 col-xl-11  example-wrapper be-card-candidate mb-4">
                 <div class="card-body be-card-candidat">
                     <h5 class="card-title">Bonjour {{ app.user.firstname }}</h5>
                     <p class="be-maj">Dernière mise à jour {{ app.user.updatedAt|ago }}</p>
@@ -22,24 +23,24 @@
                     <div class="be-log-out position-absolute bottom-0 end-0 my-2 mx-2">
                         <a href="/logout" class="text-dark">Déconnexion
                             <i class="fa-solid fa-right-from-bracket fa-2xl WS-header" type="button"
-                                style="color: #04380a;"></i>
+                                ></i>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
         {#Group 2#}
-        <div class="col-lg-4 col-12 align-items-center d-flex flex-column justify-content-center">
-            <a href="{{ path('app_user_search', {id: app.user.id}) }}" class="text-dark">
-                <div class="card example-wrapper be-card-search mb-4" style="width: 20rem; height: 10rem; ">
-                    <div class="card-body">
-                        <i class="fa-solid fa-magnifying-glass-plus fa-2xl" style="color: #ffffff;"></i>
+        <div class="col-lg-6 col-12 row align-items-center d-flex  justify-content-center justify-content-md-between
+        p-0">
+            <a href="{{ path('app_user_search', {id: app.user.id}) }}" class="text-dark p-0  col-11 col-md-6 px-md-1
+            px-xl-4">
+                <div class="card example-wrapper be-card-search mb-4" >
+                    <div class="card-body d-flex d-xl-block justify-content-between align-items-center">
+                        <i class="fa-solid fa-magnifying-glass-plus fa-2xl"></i>
                         <h5 class="card-title">
-
                             Mes recherches
-
                         </h5>
-                        <h6 class="card-subtitle mb-2 text-muted be-test">
+                        <h6 class="card-subtitle mb-2 text-muted be-test d-none d-xl-inline">
                             Je precise mes criteres de recherche et je recois toutes
                             les
                             offres
@@ -48,58 +49,60 @@
                     </div>
                 </div>
             </a>
-            <a href="{{ path('app_user_edit', {'id': app.user.id}) }}">
-                <div class="card example-wrapper be-card-information mb-4" style="width: 20rem; height: 10rem">
-                    <div class="card-body">
-                        <i class="fa-solid fa-id-card fa-2xl" style="color: #ffffff;"></i>
+            <a href="{{ path('app_user_edit', {'id': app.user.id}) }}" class="p-0  col-11 col-md-6 px-md-1 px-xl-4">
+                <div class="card example-wrapper be-card-information mb-4" >
+                    <div class="card-body d-flex d-xl-block justify-content-between align-items-center">
+                        <i class="fa-solid fa-id-card fa-2xl" ></i>
                         <h5 class="card-title">Mes
                             informations
                             personnelles</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
+                        <h6 class="card-subtitle mb-2 text-muted d-none d-xl-inline">
                             Je renseigne mon identite et mes parametres de connexion
                         </h6>
                     </div>
                 </div>
             </a>
-            <a href="{{ path('app_user_favlist', {'id': app.user.id}) }}">
-                <div class="card example-wrapper be-card-favorites mb-4" style="width: 20rem; height: 10rem">
-                    <div class="card-body">
-                        <i class="fa-solid fa-bookmark fa-2xl" style="color: #ffffff;"></i>
+            <a href="{{ path('app_user_favlist', {'id': app.user.id}) }}" class="p-0  col-11 col-md-6 px-md-1 px-xl-4">
+                <div class="card example-wrapper be-card-favorites mb-4" >
+                    <div class="card-body d-flex d-xl-block justify-content-between align-items-center">
+                        <i class="fa-solid fa-bookmark fa-2xl" ></i>
                         <h5 class="card-title">Mes favoris</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
+                        <h6 class="card-subtitle mb-2 text-muted d-none d-xl-inline">
                             Accéder à ma liste d'offres favorites
                         </h6>
                     </div>
                 </div>
             </a>
-        </div>
-        {#Group 3#}
-        <div class="col-lg-4 col-12 align-items-center d-flex flex-column">
-            <a href="{{ path('app_resume_index', {'id': app.user.id}) }}">
-                <div class="card example-wrapper be-card-resume mb-4" style="width: 20rem; height: 10rem">
-                    <div class="card-body">
-                        <i class="fa-solid fa-file fa-2xl" style="color: #ffffff;"></i>
+            <a href="{{ path('app_resume_index', {'id': app.user.id}) }}" class="p-0  col-11 col-md-6 px-md-1 px-xl-4">
+                <div class="card example-wrapper be-card-resume mb-4">
+                    <div class="card-body d-flex d-xl-block justify-content-between align-items-center">
+                        <i class="fa-solid fa-file fa-2xl"></i>
                         <h5 class="card-title">Mes CV</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
+                        <h6 class="card-subtitle mb-2 text-muted d-none d-xl-inline">
                             J'organise et je priorise mes CV
                         </h6>
                     </div>
                 </div>
             </a>
-            <div class="card example-wrapper be-card-applications mb-4" style="width: 20rem; height: 10rem">
-                <div class="card-body">
-                    <i class="fa-solid fa-building fa-2xl" style="color: #ffffff;"></i>
-                    <h5 class="card-title">
-                        <a href="{{ path('app_user_candidatures', {id: app.user.id}) }}" class="text-dark">
+            <a href="{{ path('app_user_candidatures', {id: app.user.id}) }}" class="text-dark p-0  col-11 col-md-6
+            px-md-1 px-xl-4">
+                <div class="card example-wrapper be-card-applications mb-4" >
+                    <div class="card-body d-flex d-xl-block justify-content-between align-items-center">
+                        <i class="fa-solid fa-building fa-2xl"></i>
+                        <h5 class="card-title">
                             Mes candidatures
-                    </h5>
-                    <h6 class="card-subtitle mb-2 text-muted">
-                        Accéder à ma liste de candidature en cours
-                    </h6>
+                        </h5>
+                        <h6 class="card-subtitle mb-2 text-muted d-none d-xl-inline">
+                            Accéder à ma liste de candidature en cours
+                        </h6>
+                    </div>
                 </div>
-            </div>
             </a>
         </div>
+{#        #}{#Group 3#}
+{#        <div class="col-lg-3 col-12 row align-items-center d-flex flex-column">#}
+{#           #}
+{#        </div>#}
 
     </div>
 </div>

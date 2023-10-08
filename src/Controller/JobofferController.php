@@ -9,6 +9,7 @@ use App\Form\JobofferType;
 use App\Repository\JobofferRepository;
 use App\Repository\SalaryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -177,9 +178,17 @@ class JobofferController extends AbstractController
     }
 
     #[Route('/company/{id}', name: 'app_joboffer_company_filter', methods: ['GET'])]
-    public function getJoboffersByCompany(int $id, JobofferRepository $jobofferRepository): Response
-    {
+    public function getJoboffersByCompany(
+        int $id,
+        JobofferRepository $jobofferRepository,
+        PaginatorInterface $paginator
+    ): Response {
         $company = $jobofferRepository->findBy(['company' => $id]);
+        $company = $paginator->paginate(
+            $company,
+            1,
+            10
+        );
 
         return $this->render('joboffer/companyfilter.html.twig', [
             'company' => $company,

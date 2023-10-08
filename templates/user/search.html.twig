@@ -9,7 +9,7 @@
     </div>
     <h2 class="be-h2 text-center">Mes <span>recherches</span></h2>
     <div class="container m-auto d-flex justify-content-around align-items-center my-5">
-        <ul class="be-joboffer-card-template-ul ">
+        <ul class="be-joboffer-card-template-ul p-0">
             {% if app.user.searches is empty %}
                 <div class="container m-auto d-flex justify-content-around align-items-center my-5">
                     <h2 class="be-h3">Vous n'avez pas de recherche enregistrée</h2>
@@ -44,10 +44,12 @@
                                             {{ search.contract.type }}
                                         {% endif %}
                                     </footer>
-                                    <form action="{{ path('app_joboffer_Mysearch') }}" method="post">
+                                    <form action="{{ path('app_joboffer_Mysearch', { id: search.id }) }}"
+                                          method="post">
                                         <input type="hidden" name="searchId" value="{{ search.id }}">
                                         <div class="text-center">
-                                            <button class="be-secondary-button" type="submit">Voir les offres</button>
+                                            <button class="be-secondary-button text-nowrap mx-1" type="submit">Les
+                                                offres</button>
                                         </div>
                                     </form>
 
