@@ -12,7 +12,7 @@
     {% else %}
         <h2 class="be-h2 text-center">Mes <span>candidatures</span></h2>
         <div class="container m-auto d-flex justify-content-around align-items-center my-5">
-            <ul class="be-joboffer-card-template-ul">
+            <ul class="be-joboffer-card-template-ul p-0">
 
                 {% for candidature in candidatures %}
                     <li>
@@ -29,10 +29,12 @@
                                     <footer class="text-secondary fs-6">{{ candidature.city }} / {{ candidature.salary.min }}€ - {{ candidature.salary.max }}€</footer>
                                     <div class="d-flex flex-row justify-content-between">
                                         <footer class="text-secondary w-50 fs-6">Annonce postée le {{ candidature.createdAt|date('d/m/Y') }}</footer>
-                                        <a href="{{ path('app_joboffer_show', {id: candidature.id}) }}"
-                                           class="be-secondary-button w-15 fs-5">Voir l'offre</a>
-                                        <a href="{{ path('app_user_candidatures_delete', {id : candidature.id}) }}"
-                                           class="be-secondary-button w-15 fs-5">Retirer ma candidature</a>
+                                       <div>
+                                           <a href="{{ path('app_joboffer_show', {id: candidature.id}) }}"
+                                              class="be-secondary-button w-15 fs-5">Voir l'offre</a>
+                                           <a href="{{ path('app_user_candidatures_delete', {id : candidature.id}) }}"
+                                              class="be-secondary-button w-15 fs-5">Retirer ma candidature</a>
+                                       </div>
                                     </div>
 
                                 </div>
