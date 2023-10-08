@@ -1,16 +1,20 @@
-function notifManagment()
-{
-    let iconNotification = document.getElementById('icon-notification');
-    let iconNotificationBtn = document.getElementById('icon-notification-button');
-    let bodyAlerts = document.querySelector('.offcanvas-body');
-    let linkAlerts = bodyAlerts.querySelectorAll('.fw-bold.link-alert');
-    if (linkAlerts.length >= 1) {
-        iconNotification.classList.remove('d-none');
-        iconNotificationBtn.classList.remove('d-none');
-    } else {
-        iconNotification.classList.add('d-none');
-        iconNotificationBtn.classList.add('d-none');
+if (document.getElementById('icon-notification')) {
+
+    function notifManagment()
+    {
+        let iconNotification = document.getElementById('icon-notification');
+        let iconNotificationBtn = document.getElementById('icon-notification-button');
+        let bodyAlerts = document.querySelector('.offcanvas-body');
+        let linkAlerts = bodyAlerts.querySelectorAll('.fw-bold.link-alert');
+        if (linkAlerts.length >= 1) {
+            iconNotification.classList.remove('d-none');
+            iconNotificationBtn.classList.remove('d-none');
+        } else {
+            iconNotification.classList.add('d-none');
+            iconNotificationBtn.classList.add('d-none');
+        }
     }
+    notifManagment();
 }
 
 function readAlert(event)
@@ -43,6 +47,7 @@ function readAlert(event)
 
 window.readAlert = readAlert;
 
+
 function deleteAlert(event)
 {
     event.preventDefault();
@@ -63,4 +68,3 @@ function deleteAlert(event)
 }
 
 window.deleteAlert = deleteAlert;
-notifManagment();
