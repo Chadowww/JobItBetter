@@ -31,9 +31,9 @@
                                         <footer class="text-secondary w-50 fs-6">Annonce postée le {{ candidature.createdAt|date('d/m/Y') }}</footer>
                                        <div>
                                            <a href="{{ path('app_joboffer_show', {id: candidature.id}) }}"
-                                              class="be-secondary-button w-15 fs-5">Voir l'offre</a>
+                                              class="be-secondary-button w-15 fs-5 my-1">Voir l'offre</a>
                                            <a href="{{ path('app_user_candidatures_delete', {id : candidature.id}) }}"
-                                              class="be-secondary-button w-15 fs-5">Retirer ma candidature</a>
+                                              class="be-secondary-button w-15 fs-5 my-1">Retirer ma candidature</a>
                                        </div>
                                     </div>
 
