@@ -6,8 +6,9 @@
 <div class="container m-auto d-flex justify-content-around align-items-center my-5">
     <div class="row flex justify-content-center justify-content-lg-between">
         {#Group 1#}
-        <div class="col-lg-6 col-12 row  order-md-first order-lg-last align-items-center d-flex flex-column p-0">
-            <div class="card col-11 example-wrapper be-card-candidate mb-4">
+        <div class="col-lg-6 col-12 row  px-md-2 px-xl-4 order-md-first order-lg-last align-items-center d-flex
+        flex-column p-0">
+            <div class="card col-12 col-xl-11  example-wrapper be-card-candidate mb-4">
                 <div class="card-body be-card-candidat">
                     <h5 class="card-title">Bonjour {{ app.user.firstname }}</h5>
                     <p class="be-maj">Dernière mise à jour {{ app.user.updatedAt|ago }}</p>
@@ -37,9 +38,7 @@
                     <div class="card-body d-flex d-xl-block justify-content-between align-items-center">
                         <i class="fa-solid fa-magnifying-glass-plus fa-2xl"></i>
                         <h5 class="card-title">
-
                             Mes recherches
-
                         </h5>
                         <h6 class="card-subtitle mb-2 text-muted be-test d-none d-xl-inline">
                             Je precise mes criteres de recherche et je recois toutes
