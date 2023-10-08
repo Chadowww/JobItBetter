@@ -55,16 +55,26 @@ class SearchBarController extends AbstractController
         ]);
     }
 
-    #[Route('/search/ma-recherche', name: 'app_joboffer_Mysearch', methods: ['GET', 'POST'])]
+    #[Route('/search/ma-recherche/{id}', name: 'app_joboffer_Mysearch', methods: ['GET', 'POST'])]
     public function mySearch(
         Request $request,
         JobofferRepository $jobofferRepository,
-        SearchRepository $searchRepository
+        SearchRepository $searchRepository,
+        PaginatorInterface $paginator
     ): Response {
         $searchId = $request->request->get('searchId');
         $search = $searchRepository->find($searchId);
 
+        if (!$search) {
+            throw $this->createNotFoundException('La recherche n\'existe pas');
+        }
+
         $result =  $jobofferRepository->findByMySearch($search);
+        $result = $paginator->paginate(
+            $result,
+            $request->query->getInt('page', 1),
+            10
+        );
         return $this->render('joboffer/search.html.twig', [
             'joboffers' => $result,
         ]);
