@@ -16,7 +16,7 @@
                 {% for resume in resumes %}
                 <tr>
                     <td class="col-8">{{ resume.name }}</td>
-                    <td><a target="_blank" href="{{ path('app_resume_read', {'id': resume.id}) }}">Voir</a></td>
+                    <td><a target="_blank" href="{{ path('app_resume_show', {'id': resume.id}) }}">Voir</a></td>
                     <td class="pt-0">{{ include('resume/_delete_form.html.twig') }}</td>
                 </tr>
                 {% else %}

@@ -35,6 +35,7 @@ security:
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
     role_hierarchy:
+        ROLE_CANDIDATE : ROLE_USER
         ROLE_COMPANY: ROLE_USER
         ROLE_ADMIN: ROLE_COMPANY
         
@@ -47,7 +48,7 @@ security:
         - { path: ^/contract, roles: ROLE_ADMIN }
         - { path: ^/job/, roles: ROLE_ADMIN }
         - { path: ^/salary, roles: ROLE_ADMIN }
-        - { path: ^/user, roles: ROLE_USER }
+        - { path: ^/user, roles: ROLE_CANDIDATE }
         - { path: ^/joboffer/new, roles: ROLE_COMPANY }
         - { path: ^/joboffer/edit, roles: ROLE_COMPANY }
         - { path: ^/joboffer/delete, roles: ROLE_COMPANY }
