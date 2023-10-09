@@ -11,6 +11,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\{Request, Response};
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/resume')]
 class ResumeController extends AbstractController
@@ -24,6 +25,7 @@ class ResumeController extends AbstractController
         $this->userRepository = $userRepository;
     }
 
+    #[isgranted('ROLE_CANDIDATE')]
     #[Route('/', name: 'app_resume_index', methods: ['GET'])]
     public function index(ResumeRepository $resumeRepository): Response
     {
@@ -34,6 +36,7 @@ class ResumeController extends AbstractController
         ]);
     }
 
+    #[isgranted('ROLE_CANDIDATE')]
     #[Route('/new', name: 'app_resume_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
@@ -58,15 +61,16 @@ class ResumeController extends AbstractController
             'form' => $form,
         ]);
     }
-
+    #[isgranted('ROLE_CANDIDATE')]
     #[Route('/{id}', name: 'app_resume_show', methods: ['GET'])]
-    public function show(Resume $resume): Response
+    public function show(Resume $resume): false|int
     {
-        return $this->render('resume/show.html.twig', [
-            'resume' => $resume,
-        ]);
+        $file = $this->getParameter('kernel.project_dir') . '/public/uploads/resume/' . $resume->getPath();
+        header('Content-type: application/pdf');
+        return readfile($file);
     }
 
+    #[isgranted('ROLE_CANDIDATE')]
     #[Route('/{id}/edit', name: 'app_resume_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Resume $resume, ResumeRepository $resumeRepository): Response
     {
@@ -98,6 +102,7 @@ class ResumeController extends AbstractController
     /**
      * @throws ORMException
      */
+    #[isgranted('ROLE_COMPANY')]
     #[Route('/{id}/read', name: 'app_resume_read', methods: ['GET'])]
     public function readResume(Resume $resume): bool|int
     {
