@@ -2,29 +2,47 @@
 
 namespace App\DataFixtures;
 
+use AllowDynamicProperties;
 use App\Entity\Resume;
+use App\Repository\TechnologyRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Faker\Factory;
 
-class ResumeFixtures extends Fixture
+#[AllowDynamicProperties] class ResumeFixtures extends Fixture implements DependentFixtureInterface
 {
+    public function __construct(TechnologyRepository $technologyRepository)
+    {
+        $this->technologyRepository = $technologyRepository;
+    }
+
     public function load(ObjectManager $manager): void
     {
-        $resume = new Resume();
-        $resume->setName('CV principal');
-        $resume->setPath('assets/uploads/resumes/CVKevindavoust.pdf');
-        $this->addReference('resume-1', $resume);
+        $faker = Factory::create('fr_FR');
 
-        $manager->persist($resume);
+        for ($i = 0; $i < 40; $i++) {
+            $resume = new Resume();
+            $resume->setName($faker->jobTitle);
+            $resume->setPath('assets/uploads/resumes/CVKevindavoust.pdf');
 
-        $resume = new Resume();
-        $resume->setName('CV secondaire');
-        $resume->setPath('assets/uploads/resumes/CVKevindavoust.pdf');
-        $this->addReference('resume-2', $resume);
+            for ($j = 0; $j < 7; $j++) {
+                $technology = $this->getReference('technology_' . random_int(0, 49));
+                $resume->addTechnology($technology);
+                $manager->persist($technology);
+            }
+            $this->addReference('resume_' . $i, $resume);
 
-        $manager->persist($resume);
+            $manager->persist($resume);
+        }
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            TechnologiesFixtures::class,
+        ];
     }
 }

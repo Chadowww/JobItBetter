@@ -3,12 +3,12 @@
 {% block title %}{{ company.name }} - profil{% endblock %}
 
 {% block body %}
-
-<div class="container m-auto d-flex justify-content-around align-items-center my-5">
-    <div class="row">
+    <div class="container m-auto d-flex justify-content-around align-items-center my-5">
+        <div class="row flex justify-content-center justify-content-lg-between">
         {#Group 1#}
-        <div class="col-lg-4 col-12 order-md-first order-lg-last align-items-center d-flex flex-column be-user-h1-fav">
-            <div class="card example-wrapper be-card-candidate mb-4" style="width: 20rem; height: 21rem;">
+            <div class="col-lg-6 col-12 row  px-md-2 px-xl-4 order-md-first order-lg-last align-items-center d-flex
+        flex-column p-0">
+                <div class="card col-12 col-xl-11  example-wrapper be-card-candidate mb-4">
                 <div class="card-body be-card-candidat">
                     <h5 class="card-title">Bonjour {{ company.name }}</h5>
                     <p class="be-maj">Dernière mise à jour {{ currentDateTime | ago }}</p>
@@ -32,44 +32,59 @@
             </div>
         </div>
         {#Group 2#}
-        <div class="col-lg-4 col-12 align-items-center d-flex flex-column justify-content-strat">
-            <a href="{{ path('app_company_offers', {'id': company.id}) }}">
-            <div class="card example-wrapper be-card-search mb-4" style="width: 20rem; height: 10rem; ">
-                <div class="card-body">
-                    <i class="fa-solid fa-magnifying-glass-plus fa-2xl" style="color: #ffffff;"></i>
+            <div class="col-lg-6 col-12 row align-items-center d-flex  justify-content-center justify-content-md-between
+        p-0">
+                <a href="{{ path('app_company_offers', {'id': company.id}) }}" class="text-dark p-0  col-11 col-md-6
+                px-md-1 px-xl-4">
+             <div class="card example-wrapper be-card-search mb-4" >
+                 <div class="card-body d-flex d-xl-block justify-content-between align-items-center">
+                    <i class="fa-solid fa-magnifying-glass-plus fa-2xl"></i>
                     <h5 class="card-title">Mes offres</h5>
-                    <h6 class="card-subtitle mb-2 text-muted be-test">
+                     <h6 class="card-subtitle mb-2 text-muted be-test d-none d-xl-inline">
                         Je modifie ou efface mes offre mise en ligne
                     </h6>
                 </div>
             </div>
             </a>
-            <div class="card example-wrapper be-card-situation mb-4" style="width: 20rem; height: 10rem">
-                <a href="{{ path('app_company_show_candidate', {'id': company.id}) }}">
-                    <div class="card-body">
-                        <i class="fa-solid fa-address-book fa-2xl" style="color: #ffffff;"></i>
+            <a href="{{ path('app_company_show_candidate', {'id': company.id}) }}" class="p-0  col-11 col-md-6 px-md-1 px-xl-4">
+                <div class="card example-wrapper be-card-information mb-4" >
+                    <div class="card-body d-flex d-xl-block justify-content-between align-items-center">
+                        <i class="fa-solid fa-address-book fa-2xl"></i>
                         <h5 class="card-title text-dark">Mes candidats</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
+                        <h6 class="card-subtitle mb-2 text-muted be-test d-none d-xl-inline">
                             J'accède aux candidats qui on postuler a mes offres
-                        </h6>
-                    </div></a>
-            </div>
-        </div>
-        {#Group 3#}
-        <div class="col-lg-4 col-12 align-items-center d-flex flex-column justify-content-strat">
-            <a href="{{ path('app_company_edit', {'id': company.id}) }}">
-                <div class="card example-wrapper be-card-resume mb-4" style="width: 20rem; height: 10rem">
-                    <div class="card-body">
-                        <i class="fa-solid fa-bookmark fa-2xl" style="color: #ffffff;"></i>
-                        <h5 class="card-title">Mes informations d'entreprise</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            Accéder à ma liste d'offres favorites
                         </h6>
                     </div>
                 </div>
             </a>
-        </div>
+                <a href="{{ path('app_company_edit', {'id': company.id}) }}" class="p-0  col-11 col-md-6 px-md-1
+                px-xl-4">
+                    <div class="card example-wrapper be-card-favorites mb-4" >
+                        <div class="card-body d-flex d-xl-block justify-content-between align-items-center">
+                            <i class="fa-solid fa-bookmark fa-2xl"></i>
+                            <h5 class="card-title">Mes informations d'entreprise</h5>
+                            <h6 class="card-subtitle mb-2 text-muted be-test d-none d-xl-inline">
+                                Accéder à ma liste d'offres favorites
+                            </h6>
+                        </div>
+                    </div>
+                </a>
+                <a href="{{ path('app_cvtheque') }}" class="text-dark p-0  col-11 col-md-6
+            px-md-1 px-xl-4">
+                    <div class="card example-wrapper be-card-applications mb-4" >
+                        <div class="card-body d-flex d-xl-block justify-content-between align-items-center">
+                            <i class="bi bi-file-earmark-person-fill fa-2xl"></i>
+                            <h5
+                                class="card-title">
+                                Accès à la CVthèque
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted d-none d-xl-inline">
+                                Accéder à la liste complète des CV disponible
+                            </h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
     </div>
 </div>
-{# {{ include('user/_delete_form.html.twig') }} #}
 {% endblock %}

@@ -13,8 +13,7 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        // $fakerSiret = new Generator();
-        // $fakerSiret->addProvider(new FakerCompany($fakerSiret));
+
         $companies = [
             'Société Générale',
             'Konbini',
@@ -47,7 +46,7 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
                ->setPhone($faker->phoneNumber)
                ->setSiret('1443032370083' . $i)
                ->setLogo($logo[$i])
-               ->setUser($this->getReference('user_' . $i));
+               ->setUser($this->getReference('user_company_' . $i));
             $this->addReference('company_' . $i, $company);
             $manager->persist($company);
         }
@@ -58,10 +57,11 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
             ->setPhone($faker->phoneNumber)
             ->setSiret('1443032370083')
             ->setLogo('https://upload.wikimedia.org/wikipedia/fr/9/9b/Logo-societe-generale.png')
-            ->setUser($this->getReference('user_10'));
+            ->setUser($this->getReference('user_42'));
+
         $manager->persist($company);
 
-           $manager->flush();
+        $manager->flush();
     }
 
 
