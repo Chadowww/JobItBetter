@@ -76,6 +76,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $chadoCompany->setPassword($this->hasher->hashPassword($chadoCompany, '1234567890'));
         $chadoCompany->setRoles(['ROLE_COMPANY']);
         $chadoCompany->setIsVerified(true);
+        $this->addReference('user_10', $chadoCompany);
         $manager->persist($chadoCompany);
 
         $manager->flush();

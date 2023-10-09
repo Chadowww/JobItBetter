@@ -51,6 +51,16 @@ class CompanyFixtures extends Fixture implements DependentFixtureInterface
             $this->addReference('company_' . $i, $company);
             $manager->persist($company);
         }
+
+        $company = new Company();
+        $company->setName('AsTuring')
+            ->setCity('Libourne')
+            ->setPhone($faker->phoneNumber)
+            ->setSiret('1443032370083')
+            ->setLogo('https://upload.wikimedia.org/wikipedia/fr/9/9b/Logo-societe-generale.png')
+            ->setUser($this->getReference('user_10'));
+        $manager->persist($company);
+
            $manager->flush();
     }
 
