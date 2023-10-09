@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/joboffer')]
 class JobofferController extends AbstractController
@@ -31,6 +32,7 @@ class JobofferController extends AbstractController
         ]);
     }
 
+    #[isGranted('ROLE_COMPANY')]
     #[Route('/new', name: 'app_joboffer_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
@@ -119,6 +121,7 @@ class JobofferController extends AbstractController
         ]);
     }
 
+    #[isgranted('ROLE_COMPANY')]
     #[Route('/{id}/edit', name: 'app_joboffer_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Joboffer $joboffer, JobofferRepository $jobofferRepository): Response
     {
@@ -157,6 +160,7 @@ class JobofferController extends AbstractController
         );
     }
 
+    #[isGranted('ROLE_CANDIDATE')]
     #[Route('/{id}/favlist', name: 'app_joboffer_favlist', methods: ['GET', 'POST'])]
     public function addToFavlist(Joboffer $joboffer, UserRepository $userRepository): Response
     {
