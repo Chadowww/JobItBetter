@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon profil{% endblock %}
+{% block title %}{{ app.user.firstname }} - profil{% endblock %}
 
 {% block body %}
 <div class="container m-auto d-flex justify-content-around align-items-center my-5">
@@ -99,11 +99,6 @@
                 </div>
             </a>
         </div>
-{#        #}{#Group 3#}
-{#        <div class="col-lg-3 col-12 row align-items-center d-flex flex-column">#}
-{#           #}
-{#        </div>#}
-
     </div>
 </div>
 {% endblock %}
