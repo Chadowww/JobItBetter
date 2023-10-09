@@ -18,9 +18,14 @@ class TechnologiesFixtures extends Fixture
             "MySQL", "PostgreSQL", "MongoDB", "Oracle", "SQL Server", "Git", "Docker", "Kubernetes",
             "AWS (Amazon Web Services)", "Azure", "Google Cloud", "Heroku", "RESTful API", "GraphQL"
         ];
+        $i = 0;
 
         foreach ($technologies as $technology) {
+            $techno = new Technology();
+            $techno->setName($technology);
             $manager->persist((new Technology())->setName($technology));
+            $this->addReference('technology_' . $i, $techno);
+            $i++;
         }
 
         $manager->flush();
