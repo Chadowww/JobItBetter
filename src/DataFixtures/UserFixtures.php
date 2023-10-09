@@ -75,6 +75,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $chadoCompany->setEmail('alexandresale.dev@outlook.com');
         $chadoCompany->setPassword($this->hasher->hashPassword($chadoCompany, '1234567890'));
         $chadoCompany->setRoles(['ROLE_COMPANY']);
+        $this->addReference('user_10', $chadoCompany);
         $chadoCompany->setIsVerified(true);
         $manager->persist($chadoCompany);
 
