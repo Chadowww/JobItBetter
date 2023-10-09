@@ -32,23 +32,26 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $company->setEmail('company' . $i . '@jobitbetter.com');
             $company->setPassword($this->hasher->hashPassword($company, 'company'));
             $company->setRoles(['ROLE_COMPANY']);
-            $this->addReference('user_' . $i, $company);
+            $this->addReference('user_company_' . $i, $company);
             //pour le test a effacer pour la démo
             $company->setIsVerified(true);
             $manager->persist($company);
         }
 
-        $user = new User();
-        $user->setFirstname($faker->firstName());
-        $user->setLastname($faker->lastName());
-        $user->setEmail('user@jobitbetter.com');
-        $user->setPassword($this->hasher->hashPassword($user, 'user'));
-        $user->setRoles(['ROLE_CANDIDATE']);
-        $user->addResume($this->getReference('resume-1'));
-        $user->addResume($this->getReference('resume-2'));
-        //pour le test a effacer pour la démo
-        $user->setIsVerified(true);
-        $manager->persist($user);
+        for ($i = 0; $i < 40; $i++) {
+            $user = new User();
+            $user->setFirstname($faker->firstName());
+            $user->setLastname($faker->lastName());
+            $user->setEmail('user' . $i . '@jobitbetter.com');
+            $user->setPassword($this->hasher->hashPassword($user, 'user'));
+            $user->setRoles(['ROLE_CANDIDATE']);
+            $this->addReference('user_' . $i, $user);
+            $user->addResume($this->getReference('resume_' . $i));
+            $user->addResume($this->getReference('resume_' . $i));
+            //pour le test a effacer pour la démo
+            $user->setIsVerified(true);
+            $manager->persist($user);
+        }
 
         $admin = new User();
         $admin->setFirstname($faker->firstName());
@@ -75,9 +78,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $chadoCompany->setEmail('alexandresale.dev@outlook.com');
         $chadoCompany->setPassword($this->hasher->hashPassword($chadoCompany, '1234567890'));
         $chadoCompany->setRoles(['ROLE_COMPANY']);
-        $this->addReference('user_10', $chadoCompany);
+        $this->addReference('user_42', $chadoCompany);
         $chadoCompany->setIsVerified(true);
-        $this->addReference('user_10', $chadoCompany);
         $manager->persist($chadoCompany);
 
         $manager->flush();
