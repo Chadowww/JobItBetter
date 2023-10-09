@@ -60,6 +60,24 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $admin->setIsVerified(true);
         $manager->persist($admin);
 
+        $chadoUser = new User();
+        $chadoUser->setFirstname('Alexadre');
+        $chadoUser->setLastname('Salé');
+        $chadoUser->setEmail('a.sale@hotmail.fr');
+        $chadoUser->setPassword($this->hasher->hashPassword($chadoUser, '1234567890'));
+        $chadoUser->setRoles(['ROLE_USER']);
+        $chadoUser->setIsVerified(true);
+        $manager->persist($chadoUser);
+
+        $chadoCompany = new User();
+        $chadoCompany->setFirstname('Alexadre');
+        $chadoCompany->setLastname('Salé');
+        $chadoCompany->setEmail('alexandresale.dev@outlook.com');
+        $chadoCompany->setPassword($this->hasher->hashPassword($chadoCompany, '1234567890'));
+        $chadoCompany->setRoles(['ROLE_COMPANY']);
+        $chadoCompany->setIsVerified(true);
+        $manager->persist($chadoCompany);
+
         $manager->flush();
     }
 
