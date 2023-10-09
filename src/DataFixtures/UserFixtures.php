@@ -43,7 +43,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $user->setLastname($faker->lastName());
         $user->setEmail('user@jobitbetter.com');
         $user->setPassword($this->hasher->hashPassword($user, 'user'));
-        $user->setRoles(['ROLE_USER']);
+        $user->setRoles(['ROLE_CANDIDATE']);
         $user->addResume($this->getReference('resume-1'));
         $user->addResume($this->getReference('resume-2'));
         //pour le test a effacer pour la démo
@@ -65,7 +65,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $chadoUser->setLastname('Salé');
         $chadoUser->setEmail('a.sale@hotmail.fr');
         $chadoUser->setPassword($this->hasher->hashPassword($chadoUser, '1234567890'));
-        $chadoUser->setRoles(['ROLE_USER']);
+        $chadoUser->setRoles(['ROLE_CANDIDATE']);
         $chadoUser->setIsVerified(true);
         $manager->persist($chadoUser);
 
