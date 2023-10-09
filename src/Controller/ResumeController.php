@@ -4,7 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Resume;
 use App\Form\ResumeType;
-use App\Repository\{ResumeRepository, UserRepository};
+use App\Services\CvthequeService;
+use App\Repository\{ResumeRepository, TechnologyRepository, UserRepository};
 use App\Services\AlertService;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,8 +35,11 @@ class ResumeController extends AbstractController
     }
 
     #[Route('/new', name: 'app_resume_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ResumeRepository $resumeRepository): Response
-    {
+    public function new(
+        Request $request,
+        ResumeRepository $resumeRepository,
+        CvthequeService $cvthequeService
+    ): Response {
         $resume = new Resume();
         $form = $this->createForm(ResumeType::class, $resume);
         $form->handleRequest($request);
@@ -43,6 +47,8 @@ class ResumeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $resume->setUser($this->getUser());
             $resumeRepository->save($resume, true);
+
+            $cvthequeService->addResume($resume);
 
             return $this->redirectToRoute('app_resume_index', [], Response::HTTP_SEE_OTHER);
         }
