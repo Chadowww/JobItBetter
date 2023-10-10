@@ -49,6 +49,7 @@ security:
         - { path: ^/job/, roles: ROLE_ADMIN }
         - { path: ^/salary, roles: ROLE_ADMIN }
         - { path: ^/user, roles: ROLE_CANDIDATE }
+        - { path: ^/cvtheque, roles: ROLE_COMPANY }
         - { path: ^/joboffer/new, roles: ROLE_COMPANY }
         - { path: ^/joboffer/edit, roles: ROLE_COMPANY }
         - { path: ^/joboffer/delete, roles: ROLE_COMPANY }
