@@ -21,6 +21,10 @@ class Technology
     #[ORM\ManyToMany(targetEntity: Resume::class, mappedBy: 'technology')]
     private Collection $resumes;
 
+    #[ORM\ManyToOne(inversedBy: 'technologies')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
+
     public function __construct()
     {
         $this->resumes = new ArrayCollection();
@@ -66,6 +70,23 @@ class Technology
         if ($this->resumes->removeElement($resume)) {
             $resume->removeTechnology($this);
         }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }
