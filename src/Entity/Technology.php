@@ -6,6 +6,7 @@ use App\Repository\TechnologyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: TechnologyRepository::class)]
 class Technology
@@ -24,6 +25,20 @@ class Technology
     #[ORM\ManyToOne(inversedBy: 'technologies')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
+
+    #[Gedmo\Slug(fields: ['name'])]
+    #[ORM\Column(length: 100, unique: true)]
+    private string $slug;
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): void
+    {
+        $this->slug = $slug;
+    }
 
     public function __construct()
     {
