@@ -14,27 +14,31 @@ Mes offres d'emploi publiées
     </div>
     <div class="d-flex justify-content-center">
         <ul class="be-joboffer-card-template-ul">
-            {% for joboffer in offers %}
-                <li>
-                    <div class="card be-joboffer-card-template mb-4 w-100">
-                        <div class="card-body">
-                            <div class="row">
-                                <h5 class="card-title text-secondary fs-6 col-10">{{ joboffer.company.name }}</h5>
-                            </div>
-                            <h5 class="card-title mb-3 fs-5">{{ joboffer.contract.type }} - {{ joboffer.title }}</h5>
-                            <div class="d-flex flex-column-reverse">
-                                {% if joboffer.salary.min is defined %}
-                                    <footer class="text-secondary fs-6">{{ joboffer.city }} / {{ joboffer.salary.min }}€ - {{ joboffer.salary.max }}€</footer>
-                                {% endif %}
-                                <div class="d-flex flex-row justify-content-between">
-                                    <footer class="text-secondary w-50 fs-6">Annonce postée le {{ joboffer.createdAt|date('d/m/Y') }}</footer>
-                                    <a href="{{ path('app_joboffer_show', {id: joboffer.id}) }}" class="be-secondary-button w-15 fs-5">Voir l'offre</a>
+            {% if offers is not empty %}
+                {% for joboffer in offers %}
+                    <li>
+                        <div class="card be-joboffer-card-template mb-4 w-100">
+                            <div class="card-body">
+                                <div class="row">
+                                    <h5 class="card-title text-secondary fs-6 col-10">{{ joboffer.company.name }}</h5>
+                                </div>
+                                <h5 class="card-title mb-3 fs-5">{{ joboffer.contract.type }} - {{ joboffer.title }}</h5>
+                                <div class="d-flex flex-column-reverse">
+                                    {% if joboffer.salary.min is defined %}
+                                        <footer class="text-secondary fs-6">{{ joboffer.city }} / {{ joboffer.salary.min }}€ - {{ joboffer.salary.max }}€</footer>
+                                    {% endif %}
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <footer class="text-secondary w-50 fs-6">Annonce postée le {{ joboffer.createdAt|date('d/m/Y') }}</footer>
+                                        <a href="{{ path('app_joboffer_show', {id: joboffer.id}) }}" class="be-secondary-button w-15 fs-5">Voir l'offre</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </li>
-            {% endfor %}
+                    </li>
+                {% endfor %}
+            {% else %}
+                <p class="text-center">Vous n'avez pas encore publié d'offre d'emploi.</p>
+            {% endif %}
         </ul>
 
     </div>
