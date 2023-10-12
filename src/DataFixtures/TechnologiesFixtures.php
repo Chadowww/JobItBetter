@@ -40,6 +40,7 @@ class TechnologiesFixtures extends Fixture implements DependentFixtureInterface
         foreach ($frontEndTechnologies as $technology) {
             $techno = new Technology();
             $techno->setName($technology);
+            $techno->setSlug($technology);
             $techno->setCategory($this->getReference('category_1'));
             $this->addReference('technology_' . $j, $techno);
             $manager->persist($techno);
@@ -50,6 +51,7 @@ class TechnologiesFixtures extends Fixture implements DependentFixtureInterface
         foreach ($backEndTechnologies as $technology) {
             $techno = new Technology();
             $techno->setName($technology);
+            $techno->setSlug($technology);
             $techno->setCategory($this->getReference('category_2'));
             $this->addReference('technology_' . $j, $techno);
             $manager->persist($techno);
@@ -59,6 +61,7 @@ class TechnologiesFixtures extends Fixture implements DependentFixtureInterface
         foreach ($otherWebTechnologies as $technology) {
             $techno = new Technology();
             $techno->setName($technology);
+            $techno->setSlug($technology);
             $techno->setCategory($this->getReference('category_4'));
             $this->addReference('technology_' . $j, $techno);
             $manager->persist($techno);
@@ -68,7 +71,8 @@ class TechnologiesFixtures extends Fixture implements DependentFixtureInterface
         foreach ($databaseTechnologies as $technology) {
             $techno = new Technology();
             $techno->setName($technology);
-            $techno->setCategory($this->getReference('category_4'));
+            $techno->setSlug($technology);
+            $techno->setCategory($this->getReference('category_5'));
             $this->addReference('technology_' . $j, $techno);
             $manager->persist($techno);
             $j++;
@@ -77,7 +81,8 @@ class TechnologiesFixtures extends Fixture implements DependentFixtureInterface
         foreach ($versionControlTechnologies as $technology) {
             $techno = new Technology();
             $techno->setName($technology);
-            $techno->setCategory($this->getReference('category_5'));
+            $techno->setSlug($technology);
+            $techno->setCategory($this->getReference('category_6'));
             $this->addReference('technology_' . $j, $techno);
             $manager->persist($techno);
             $j++;
@@ -86,7 +91,8 @@ class TechnologiesFixtures extends Fixture implements DependentFixtureInterface
         foreach ($cloudTechnologies as $technology) {
             $techno = new Technology();
             $techno->setName($technology);
-            $techno->setCategory($this->getReference('category_6'));
+            $techno->setSlug($technology);
+            $techno->setCategory($this->getReference('category_7'));
             $this->addReference('technology_' . $j, $techno);
             $manager->persist($techno);
             $j++;
@@ -95,7 +101,8 @@ class TechnologiesFixtures extends Fixture implements DependentFixtureInterface
         foreach ($apiTechnologies as $technology) {
             $techno = new Technology();
             $techno->setName($technology);
-            $techno->setCategory($this->getReference('category_7'));
+            $techno->setSlug($technology);
+            $techno->setCategory($this->getReference('category_8'));
             $this->addReference('technology_' . $j, $techno);
             $manager->persist($techno);
             $j++;
@@ -104,6 +111,7 @@ class TechnologiesFixtures extends Fixture implements DependentFixtureInterface
         foreach ($aplicationTechnologies as $technology) {
             $techno = new Technology();
             $techno->setName($technology);
+            $techno->setSlug($technology);
             $techno->setCategory($this->getReference('category_3'));
             $this->addReference('technology_' . $j, $techno);
             $manager->persist($techno);
