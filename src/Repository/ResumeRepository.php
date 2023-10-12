@@ -63,4 +63,26 @@ class ResumeRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function searchResumes(array $search): array
+    {
+        $result = [];
+        foreach ($search as $key => $value) {
+            if ($value === true) {
+                $query = $this->createQueryBuilder('r')
+                    ->join('r.technology', 't')
+                    ->join('t.category', 'c')
+                    ->andWhere('t.name = :name')
+                    ->setParameter('name', $key)
+                    ->getQuery();
+                foreach ($query->getResult() as $resume) {
+                    if (!in_array($resume, $result)) {
+                        $result[] = $resume;
+                    }
+                }
+            }
+        }
+//        dd($result);
+        return $result;
+    }
 }
