@@ -3,8 +3,9 @@
 {% block title %}Recherche d'emploi{% endblock %}
 {% block body %}
     <div class="d-flex m-4">
-        <a class="be-secondary-button " href="{{ path('app_user_search', { id: app.user.id }) }}">Retour à la page
-            précédente</a>
+        <a class="be-secondary-button" onclick="window.history.back()">
+            Retour à la page précédente
+        </a>
     </div>
 <div class="be-container-search mt-5 d-flex justify-content-center">
 
