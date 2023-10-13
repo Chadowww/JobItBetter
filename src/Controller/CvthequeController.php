@@ -13,6 +13,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 #[AllowDynamicProperties] class CvthequeController extends AbstractController
 {
+    private ResumeRepository $resumeRepository;
+    private PaginatorInterface $paginator;
     public function __construct(ResumeRepository $resumeRepository, PaginatorInterface $paginator,)
     {
         $this->resumeRepository = $resumeRepository;
@@ -33,6 +35,7 @@ use Symfony\Component\Routing\Annotation\Route;
             );
             return $this->render('cvtheque/index.html.twig', [
                 'resumes' => $resumes,
+                'lastResumes' => $this->resumeRepository->lastResumes(),
                 'form' => $form->createView(),
             ]);
         }
