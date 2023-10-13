@@ -2,11 +2,16 @@
 
 namespace App\Controller;
 
+use App\Data\FilterData;
+use App\Entity\Company;
 use App\Entity\Joboffer;
 use App\Entity\Salary;
 use App\Form\JobofferApplyType;
+use App\Form\JobofferFilterType;
 use App\Form\JobofferType;
+use App\Repository\CompanyRepository;
 use App\Repository\JobofferRepository;
+use App\Repository\ResumeRepository;
 use App\Repository\SalaryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -185,8 +190,29 @@ class JobofferController extends AbstractController
     public function getJoboffersByCompany(
         int $id,
         JobofferRepository $jobofferRepository,
+        ResumeRepository $resumeRepository,
+        Request $request,
         PaginatorInterface $paginator
     ): Response {
+
+        $data = new FilterData();
+        $data->company = $id;
+        $form = $this->createForm(JobofferFilterType::class, $data);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $joboffer = $jobofferRepository->findByFilter($data);
+            $joboffer = $paginator->paginate(
+                $joboffer,
+                1,
+                10
+            );
+            return $this->render('joboffer/companyfilter.html.twig', [
+                'joboffers' => $joboffer,
+                'lastResumes' => $resumeRepository->lastResumes(),
+                'form' => $form->createView(),
+            ]);
+        }
         $company = $jobofferRepository->findBy(['company' => $id]);
         $company = $paginator->paginate(
             $company,
@@ -195,7 +221,9 @@ class JobofferController extends AbstractController
         );
 
         return $this->render('joboffer/companyfilter.html.twig', [
-            'company' => $company,
+            'joboffers' => $company,
+            'lastResumes' => $resumeRepository->lastResumes(),
+            'form' => $form->createView(),
         ]);
     }
 }

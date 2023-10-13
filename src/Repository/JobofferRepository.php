@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Data\FilterData;
 use App\Entity\Company;
 use App\Entity\Joboffer;
 use App\Entity\Search;
@@ -86,6 +87,48 @@ class JobofferRepository extends ServiceEntityRepository
             ->setParameter('city', $search->getCity())
             ->orderBy('jo.createdAt', 'DESC')
             ->getQuery();
+        return $query->getResult();
+    }
+
+    public function findByFilter(FilterData $data): array
+    {
+        $query = $this->createQueryBuilder('jo')
+            ->join('jo.salary', 's')
+            ->join('jo.contract', 'c');
+
+        if ($data->q !== null) {
+            $query->where('jo.title LIKE :q')
+                ->setParameter('q', '%' . $data->q . '%');
+        }
+        if ($data->minSalary !== null) {
+            $query->andWhere('s.min >= :minSalary')
+                ->setParameter('minSalary', $data->minSalary);
+        }
+        if ($data->maxSalary !== null) {
+            $query->andWhere('s.max <= :maxSalary')
+                ->setParameter('maxSalary', $data->maxSalary);
+        }
+        if ($data->contract !== null) {
+            $query->andWhere('c.id IN (:contract)')
+                ->setParameter('contract', $data->contract);
+        }
+        if ($data->company !== null) {
+            $query->andWhere('jo.company = :company')
+                ->setParameter('company', $data->company);
+        }
+        if ($data->city !== null) {
+            $cityNames = [];
+            foreach ($data->city as $city) {
+                $cityNames[] = $city->getCity();
+            }
+            $query->andWhere('jo.city IN (:cities)')
+                ->setParameter('cities', $cityNames);
+        }
+
+
+        $query->orderBy('jo.createdAt', 'DESC');
+        $query = $query->getQuery();
+
         return $query->getResult();
     }
 //    /**

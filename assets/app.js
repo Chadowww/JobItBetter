@@ -41,25 +41,23 @@ if (document.querySelector('.be-banner-search')) {
 }
 
 
-if (document.querySelector('#accordionExample')) {
-    function moveElement(node)
-    {
-        let accordion = document.querySelector('.form-accordion');
-        let offcanvas = document.querySelector('.form-offcanvas');
-        let screenSize = window.innerWidth;
+function moveElement(node)
+{
+    let accordion = document.querySelector('.form-accordion');
+    let offcanvas = document.querySelector('.form-offcanvas');
+    let screenSize = window.innerWidth;
 
-        if (screenSize < 1200) {
-            offcanvas.appendChild(accordion);
-            accordion.classList.remove('col-3')
-        }
-        if (screenSize >= 1200) {
-            let parent = document.querySelector('.form-accordion-parent');
-            let firstChild = parent.firstChild;
-            // parent.appendChild(accordion);
-            parent.insertBefore(accordion, firstChild);
-            accordion.classList.add('col-3')
-        }
+    if (screenSize < 1200) {
+        offcanvas.appendChild(accordion);
+        accordion.classList.remove('col-3')
     }
-    addEventListener('DOMContentLoaded', moveElement)
-   addEventListener('resize', moveElement);
+    if (screenSize >= 1200) {
+        let parent = document.querySelector('.form-accordion-parent');
+        let firstChild = parent.firstChild;
+        // parent.appendChild(accordion);
+        parent.insertBefore(accordion, firstChild);
+        accordion.classList.add('col-3')
+    }
 }
+    addEventListener('DOMContentLoaded', moveElement)
+    addEventListener('resize', moveElement);
