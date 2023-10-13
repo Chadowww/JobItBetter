@@ -49,6 +49,7 @@ use Symfony\Component\Routing\Annotation\Route;
         );
         return $this->render('cvtheque/index.html.twig', [
             'resumes' => $resumes,
+            'lastResumes' => $this->resumeRepository->lastResumes(),
             'form' => $form->createView(),
         ]);
     }
