@@ -14,9 +14,11 @@
                 'id': 'accordionExample'
             }
         }) }}
-
             <div class="be-joboffer-card-template  sticky-element ">
-                {% set currentCategoryKey = '' %}
+    <h2 class="py-4 fs-5 m-0 w-100 d-flex justify-content-center be-h2 ">Affinez votre <span>&nbsp
+            recherche</span></h2>
+
+    {% set currentCategoryKey = '' %}
                 {% set currentCategoryLabel = '' %}
                 {% set categoryCounter = 0 %}
 
@@ -128,7 +130,33 @@
             </div>
 
         <div class="col-3 position-relative">
-            {{ component('AlerteComponent', { 'applicant': app.user.id }) }}
+            <div class="sticky-element">
+                {{ component('AlerteComponent', { 'applicant': app.user.id }) }}
+                <div class="card be-card-candidatures" style="width: 100%; min-height: 13.75rem;">
+                    <div class="card-header be-candidature fw-bold">
+                        Nouveaux CV arrivés
+                    </div>
+                    <div class="card-body">
+
+                        {% for resume in lastResumes %}
+                            <h5 class="card-title text-center be-h2">
+                                {{ resume.name }} de
+                                <a href="{{ path('app_resume_read', {id: resume.id}) }}" class="">
+                                     <span>{{ resume.getUser.getFirstName }} {{ resume.getUser.getLastName }}</span>
+                                </a>
+                            </h5>
+
+                        {% endfor %}
+                        <p class="card-text"></p>
+                        <button type="button" class="be-secondary-button m-auto " data-toggle="modal"
+                                data-target="#exampleModal">
+                            <a href="{{ path('app_user_candidatures', {id: app.user.id}) }}" class="text-dark">
+                                Voir mes candidatures
+                            </a>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         </div>
