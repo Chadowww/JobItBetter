@@ -3,97 +3,120 @@
 {% block title %}CVthèque JobItBetter{% endblock %}
 
 {% block body %}
-    <h1 class="w-100 d-flex justify-content-center my-5 fw-bold be-h2">
-        Votre prochain est peut être parmit notre <span> &nbsp CVthèque</span>
-    </h1>
-    <div class="row ">
 
-        {{ form_start(form, {
-            attr: {
-                'class': 'accordion col-2 p-0 position-relative',
-                'id': 'accordionExample'
-            }
-        }) }}
-            <div class="be-joboffer-card-template  sticky-element ">
-    <h2 class="py-4 fs-5 m-0 w-100 d-flex justify-content-center be-h2 ">Affinez votre <span>&nbsp
-            recherche</span></h2>
+    <div class="offcanvas offcanvas-start bg-transparent border-0" tabindex="-1" id="offcanvasExample"
+         aria-labelledby="offcanvas2ExampleLabel">
+
+        <div class="form-offcanvas offcanvas-body d-flex align-items-center">
+
+        </div>
+    </div>
+    <h1 class="w-100 d-flex justify-content-center m-0 mb-5 text-center fw-bold be-h2">
+        Votre prochain talent est peut-être parmis notre <span>&nbsp CVthèque</span>
+    </h1>
+
+    <div class="w-100 d-flex justify-content-center flex-wrap">
+        {% for parameter in app.request.query.keys %}
+            {% if parameter != 'submit' %}
+                <span class="badge badge-info bg-info m-1 m-md-2 fs-6">{{ parameter }}</span>
+
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <button class="btn btn-primary m-2 d-xl-none" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasExample"
+            aria-controls="offcanvasExample">
+        <i class="bi bi-funnel text-white"></i> Filtrez votre recherche
+    </button>
+
+    <div class="form-accordion-parent row d-flex justify-content-around">
+
+    {{ form_start(form, {
+        attr: {
+            'class': 'form-accordion accordion p-0 position-relative col-3',
+            'id': 'accordionExample'
+        }
+    }) }}
+    <div class="be-joboffer-card-template  sticky-element ">
+    <h2 class=" py-4 fs-5 m-0 w-100 d-flex justify-content-center bg-white be-h2 ">Affinez votre <span>&nbsp
+                    recherche</span></h2>
 
     {% set currentCategoryKey = '' %}
-                {% set currentCategoryLabel = '' %}
-                {% set categoryCounter = 0 %}
+    {% set currentCategoryLabel = '' %}
+    {% set categoryCounter = 0 %}
 
-                {% for key in form.children %}
-                    {% if key.vars.name != 'submit'  %}
+    {% for key in form.children %}
+        {% if key.vars.name != 'submit'  %}
 
-                        {% if key.vars.name starts with 'category_' %}
-            {#             Fermer la div parent précédente si nécessaire#}
-                        {% if currentCategoryKey is not empty %}
-                            </div>
-                            </div>
-                            </div>
-                        {% endif %}
-
-                        {% set categoryCounter = categoryCounter + 1 %}
-
-                        {% set currentCategoryKey = key.vars.name %}
-                        {% set currentCategoryLabel = key.vars.label %}
-                        <div class="parent accordion-item ">
-                        <h2 class="accordion-header" id="heading{{ categoryCounter }}">
-                            <button class="accordion-button p-3 fw-bold" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse{{
-                            categoryCounter }}"
-                                    aria-expanded="true" aria-controls="collapse{{ categoryCounter }}">
-                                {{ form_widget(key, {
-                                    attr: {
-                                        'class': 'd-none'
-                                    }
-                                }) }}
-                                {{ form_label(key) }}
-                            </button>
-                        </h2>
-                        <div id="collapse{{ categoryCounter }}" class="accordion-collapse collapse shhow">
-                        <div class="accordion-body d-flex flex-column justify-content-around p-2">
-                    {% else %}
-                        {% if currentCategoryKey is not empty or  key.vars.name != 'Rechercher' %}
-                            <div class="d-flex row">
-                                <div class="col-3 d-flex justify-content-center">
-                                    {{ form_widget(key) }}
-                                </div>
-                                <div class="col-9">
-                                    {{ form_label(key) }}
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endif %}
-
-                    {% endif %}
-
-                {% endfor %}
-
-            {#     Fermer la dernière div parent si nécessaire#}
+            {% if key.vars.name starts with 'category_' %}
+                {#             Fermer la div parent précédente si nécessaire#}
                 {% if currentCategoryKey is not empty %}
                     </div>
                     </div>
-                    <div class="w-100 d-flex justify-content-center">
-                        {{ form_widget(form.submit, {
-                            attr: {
-                                'class': 'be-secondary-button my-3',
-                                'id': 'submit'
-                            }
-                        }) }}
                     </div>
                 {% endif %}
-            </div>
 
-        {{ form_end(form) }}
+                {% set categoryCounter = categoryCounter + 1 %}
 
-        </div>
+                {% set currentCategoryKey = key.vars.name %}
+                {% set currentCategoryLabel = key.vars.label %}
+                <div class="parent accordion-item ">
+                <h2 class="accordion-header" id="heading{{ categoryCounter }}">
+                    <button class="accordion-button p-3 fw-bold" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{
+                            categoryCounter }}"
+                            aria-expanded="true" aria-controls="collapse{{ categoryCounter }}">
+                        {{ form_widget(key, {
+                            attr: {
+                                'class': 'd-none'
+                            }
+                        }) }}
+                        {{ form_label(key) }}
+                    </button>
+                </h2>
+                <div id="collapse{{ categoryCounter }}" class="accordion-collapse collapse shhow">
+                <div class="accordion-body d-flex flex-column justify-content-around p-2">
+            {% else %}
+                {% if currentCategoryKey is not empty or  key.vars.name != 'Rechercher' %}
+                    <div class="d-flex row">
+                        <div class="col-3 d-flex justify-content-center">
+                            {{ form_widget(key) }}
+                        </div>
+                        <div class="col-9">
+                            {{ form_label(key) }}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
 
-        <div class="col-7">
-                <ul class="be-joboffer-card-template-ul w-100">
+        {% endif %}
+
+    {% endfor %}
+
+    {#     Fermer la dernière div parent si nécessaire#}
+    {% if currentCategoryKey is not empty %}
+    </div>
+    </div>
+    <div class="w-100 d-flex justify-content-center">
+        {{ form_widget(form.submit, {
+            attr: {
+                'class': 'be-secondary-button my-3',
+                'id': 'submit'
+            }
+        }) }}
+    </div>
+    {% endif %}
+    </div>
+    </div>
+
+    {{ form_end(form) }}
+
+        <div class="col-10 col-md-7 col-xl-6 ">
+                <ul class="be-joboffer-card-template-ul w-100 m-0 p-0">
                     {% for resume in resumes %}
-                        <li class="">
-                            <div class="card be-joboffer-card-template mb-4 w-100">
+                        <li class="mb-3">
+                            <div class="card be-joboffer-card-template w-100">
                                 <div class="card-body">
                                     <div class="row">
                                         <h5 class="card-title mb-3 fs-5">
@@ -110,14 +133,16 @@
                                     </div>
                                     <h5 class="card-title text-secondary fs-6 col-10">Ses compétences</h5>
                                     <div class="d-flex justify-content-between row">
-                                        <div class="col-8">
+                                        <div class="col-7">
                                             {% for technology in resume.technology %}
                                                 {{ technology.getName }} ||
                                             {% endfor %}
                                         </div>
-                                        <div class="col-4 col-md-3 col-lg-3 col-xl-3 col-xxl-3 ">
+                                        <div class="col-5 col-md-4 col-lg-5 col-xl-4 col-xxl-3 d-flex
+                                        justify-content-center align-items-center">
                                             <div>
-                                                <a href="{{ path('app_resume_read', {id: resume.id}) }}" class="be-secondary-button w-15 fs-5">Voir le cv</a>
+                                                <a href="{{ path('app_resume_read', {id: resume.id}) }}"
+                                                   class="be-secondary-button  fs-6">Voir le cv</a>
                                             </div>
                                         </div>
                                     </div>
@@ -129,7 +154,7 @@
                 </ul>
             </div>
 
-        <div class="col-3 position-relative">
+        <div class="d-none d-md-block col-md-3 m-0 p-0 position-relative">
             <div class="sticky-element">
                 {{ component('AlerteComponent', { 'applicant': app.user.id }) }}
                 <div class="card be-card-candidatures" style="width: 100%; min-height: 13.75rem;">
@@ -140,7 +165,7 @@
 
                         {% for resume in lastResumes %}
                             <h5 class="card-title text-center be-h2">
-                                {{ resume.name }} de
+                                {{ resume.name }} <br>
                                 <a href="{{ path('app_resume_read', {id: resume.id}) }}" class="">
                                      <span>{{ resume.getUser.getFirstName }} {{ resume.getUser.getLastName }}</span>
                                 </a>
@@ -148,12 +173,6 @@
 
                         {% endfor %}
                         <p class="card-text"></p>
-                        <button type="button" class="be-secondary-button m-auto " data-toggle="modal"
-                                data-target="#exampleModal">
-                            <a href="{{ path('app_user_candidatures', {id: app.user.id}) }}" class="text-dark">
-                                Voir mes candidatures
-                            </a>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -161,8 +180,8 @@
 
         </div>
 
-        <div class="navigation d-flex justify-content-center">
-            {{ knp_pagination_render(resumes) }}
-        </div>
+    </div>
+    <div class="navigation d-flex justify-content-center">
+        {{ knp_pagination_render(resumes) }}
     </div>
 {% endblock %}

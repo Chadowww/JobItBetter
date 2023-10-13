@@ -3,10 +3,13 @@
     font-weight:600;
     margin: 20px auto;
     margin-left: 0;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 }
 
 .be-h2 span {
     color: $light-green;
+    display: contents;
 }
 
 .be-h3 {
