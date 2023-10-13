@@ -85,4 +85,13 @@ class ResumeRepository extends ServiceEntityRepository
 //        dd($result);
         return $result;
     }
+
+    public function lastResumes(): array
+    {
+        return $this->createQueryBuilder('r')
+            ->orderBy('r.id', 'DESC')
+            ->setMaxResults(3)
+            ->getQuery()
+            ->getResult();
+    }
 }
