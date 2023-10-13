@@ -3,14 +3,14 @@
 {% block title %}CVthèque JobItBetter{% endblock %}
 
 {% block body %}
-    <h1 class="w-100 d-flex justify-content-center my-5 fw-bold be-h2">
-        Votre prochain est peut être parmit notre <span> &nbsp CVthèque</span>
+    <h1 class="w-100 d-flex justify-content-center m-0 mb-5 text-center fw-bold be-h2">
+        Votre prochain talent est peut-être parmis notre <span>&nbsp CVthèque</span>
     </h1>
-    <div class="row ">
+    <div class="row d-flex justify-content-around">
 
         {{ form_start(form, {
             attr: {
-                'class': 'accordion col-2 p-0 position-relative',
+                'class': 'accordion col-3 p-0 position-relative d-none d-xl-block ',
                 'id': 'accordionExample'
             }
         }) }}
@@ -89,11 +89,11 @@
 
         </div>
 
-        <div class="col-7">
-                <ul class="be-joboffer-card-template-ul w-100">
+        <div class="col-10 col-md-7 col-xl-6 ">
+                <ul class="be-joboffer-card-template-ul w-100 m-0 p-0">
                     {% for resume in resumes %}
-                        <li class="">
-                            <div class="card be-joboffer-card-template mb-4 w-100">
+                        <li class="mb-3">
+                            <div class="card be-joboffer-card-template w-100">
                                 <div class="card-body">
                                     <div class="row">
                                         <h5 class="card-title mb-3 fs-5">
@@ -110,14 +110,15 @@
                                     </div>
                                     <h5 class="card-title text-secondary fs-6 col-10">Ses compétences</h5>
                                     <div class="d-flex justify-content-between row">
-                                        <div class="col-8">
+                                        <div class="col-7">
                                             {% for technology in resume.technology %}
                                                 {{ technology.getName }} ||
                                             {% endfor %}
                                         </div>
-                                        <div class="col-4 col-md-3 col-lg-3 col-xl-3 col-xxl-3 ">
+                                        <div class="col-5 col-md-4 col-lg-5 col-xl-4 col-xxl-3 d-flex
+                                        justify-content-center align-items-center ">
                                             <div>
-                                                <a href="{{ path('app_resume_read', {id: resume.id}) }}" class="be-secondary-button w-15 fs-5">Voir le cv</a>
+                                                <a href="{{ path('app_resume_read', {id: resume.id}) }}" class="be-secondary-button  fs-5">Voir le cv</a>
                                             </div>
                                         </div>
                                     </div>
@@ -129,7 +130,7 @@
                 </ul>
             </div>
 
-        <div class="col-3 position-relative">
+        <div class="d-none d-md-block col-md-3 m-0 p-0 position-relative">
             <div class="sticky-element">
                 {{ component('AlerteComponent', { 'applicant': app.user.id }) }}
                 <div class="card be-card-candidatures" style="width: 100%; min-height: 13.75rem;">
@@ -148,12 +149,6 @@
 
                         {% endfor %}
                         <p class="card-text"></p>
-                        <button type="button" class="be-secondary-button m-auto " data-toggle="modal"
-                                data-target="#exampleModal">
-                            <a href="{{ path('app_user_candidatures', {id: app.user.id}) }}" class="text-dark">
-                                Voir mes candidatures
-                            </a>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -161,8 +156,8 @@
 
         </div>
 
-        <div class="navigation d-flex justify-content-center">
-            {{ knp_pagination_render(resumes) }}
-        </div>
+    </div>
+    <div class="navigation d-flex justify-content-center">
+        {{ knp_pagination_render(resumes) }}
     </div>
 {% endblock %}
