@@ -11,6 +11,9 @@ width: 80%;
     border-radius: $border-radius;
 }
 
+.be-joboffer-card-template-ul>li:last-child {
+    margin-bottom: 0 !important;
+}
 
 @media screen and (max-width: 770px) {
     .be-joboffer-card-template-container {
