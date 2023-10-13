@@ -5,30 +5,109 @@
 {% endblock %}
 
 {% block body %}
-    {% for joboffer in company %}
+    <div class="offcanvas offcanvas-start bg-transparent border-0" tabindex="-1" id="offcanvasExample"
+         aria-labelledby="offcanvas2ExampleLabel">
 
-        <div class="card be-joboffer-card-template mb-4 w-100">
-            <div class="card-body">
-                <div class="row">
-                    <h5 class="card-title text-secondary fs-6 col-10">{{ joboffer.company.name }}</h5>
-                    {% if is_granted('ROLE_USER')%}
-                        <a class="col-2" id="favlist" href="{{ path('app_joboffer_favlist', {id: joboffer.id})}}" onclick="addToFavlist(event)">
-                            <i class=" fa-2x bi {{ app.user.isInFavlist(joboffer) ? 'bi-bookmark-x-fill' : 'bi-bookmark-plus' }}"></i>
-                        </a>
-                    {% endif %}
+        <div class="form-offcanvas offcanvas-body d-flex align-items-center">
+
+        </div>
+    </div>
+
+    <h1 class="w-100 d-flex justify-content-center m-0 mb-5 text-center fw-bold be-h2">
+        Votre prochain emploi est peut-être parmis<span> ces annonces</span>
+    </h1>
+
+
+{#    <div class="w-50 m-auto d-flex justify-content-center flex-wrap">#}
+{#        {% for parameter in app.request.query.keys %}#}
+{#            {% if parameter != 'submit' %}#}
+{#                <span class="badge badge-info bg-info m-1 m-md-2 fs-6">{{ parameter }}</span>#}
+
+{#            {% endif %}#}
+{#        {% endfor %}#}
+{#    </div>#}
+
+    <button class="btn btn-primary m-2 d-xl-none" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasExample"
+            aria-controls="offcanvasExample">
+        <i class="bi bi-funnel text-white"></i> Filtrez votre recherche
+    </button>
+
+    <div class="d-flex justify-content-around position-relative">
+
+        <div>
+            {{ form_start(form, {
+                attr: {
+                    class: 'sticky-element'
+                }
+            }) }}
+            {% for children in form.children %}
+                <div class="my-1">
+                    {{ form_row(children) }}
                 </div>
-                <h5 class="card-title mb-3 fs-5">{{ joboffer.contract.type }} - {{ joboffer.title }}</h5>
-                <div class="d-flex flex-column-reverse">
-                    <footer class="text-secondary fs-6">{{ joboffer.city }} / {{ joboffer.salary.min }}€ - {{ joboffer.salary.max }}€</footer>
-                    <div class="d-flex flex-row justify-content-between">
-                        <footer class="text-secondary w-50 fs-6">Annonce postée le {{ joboffer.createdAt|date('d/m/Y') }}</footer>
-                        <a href="{{ path('app_joboffer_show', {id: joboffer.id}) }}" class="be-secondary-button w-15 fs-5">Voir l'offre</a>
+            {% endfor %}
+            {{ form_end(form) }}
+        </div>
+
+
+        <div class="col-10 col-md-7 col-xl-6 ">
+            <ul class="be-joboffer-card-template-ul w-100 m-0 p-0">
+                {% if joboffers is empty %}
+                    <h2 class="text-center">Aucun résultat pour votre recherche</h2>
+                {% endif %}
+                {% for joboffer in joboffers %}
+
+                    <div class="card be-joboffer-card-template mb-4 w-100">
+                        <div class="card-body">
+                            <div class="row">
+                                <h5 class="card-title text-secondary fs-6 col-10">{{ joboffer.company.name }}</h5>
+                                {% if is_granted('ROLE_USER')%}
+                                    <a class="col-2" id="favlist" href="{{ path('app_joboffer_favlist', {id: joboffer.id})}}" onclick="addToFavlist(event)">
+                                        <i class=" fa-2x bi {{ app.user.isInFavlist(joboffer) ? 'bi-bookmark-x-fill' : 'bi-bookmark-plus' }}"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title mb-3 fs-5">{{ joboffer.contract.type }} - {{ joboffer.title }}</h5>
+                            <div class="d-flex flex-column-reverse">
+                                <footer class="text-secondary fs-6">{{ joboffer.city }} / {{ joboffer.salary.min }}€ - {{ joboffer.salary.max }}€</footer>
+                                <div class="d-flex flex-row justify-content-between">
+                                    <footer class="text-secondary w-50 fs-6">Annonce postée le {{ joboffer.createdAt|date('d/m/Y') }}</footer>
+                                    <a href="{{ path('app_joboffer_show', {id: joboffer.id}) }}" class="be-secondary-button w-15 fs-5">Voir l'offre</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="d-none d-md-block col-md-3 m-0 p-0 position-relative">
+            <div class="sticky-element">
+                {{ component('AlerteComponent', { 'applicant': app.user.id }) }}
+                <div class="card be-card-candidatures" style="width: 100%; min-height: 13.75rem;">
+                    <div class="card-header be-candidature fw-bold">
+                        Nouveaux CV arrivés
+                    </div>
+                    <div class="card-body">
+
+                        {% for resume in lastResumes %}
+                            <h5 class="card-title text-center be-h2">
+                                {{ resume.name }} <br>
+                                <a href="{{ path('app_resume_read', {id: resume.id}) }}" class="">
+                                    <span>{{ resume.getUser.getFirstName }} {{ resume.getUser.getLastName }}</span>
+                                </a>
+                            </h5>
+
+                        {% endfor %}
+                        <p class="card-text"></p>
                     </div>
                 </div>
             </div>
         </div>
-    {% endfor %}
+    </div>
+
+
     <div class="navigation d-flex justify-content-center">
-        {{ knp_pagination_render(company) }}
+        {{ knp_pagination_render(joboffers) }}
     </div>
 {% endblock %}
