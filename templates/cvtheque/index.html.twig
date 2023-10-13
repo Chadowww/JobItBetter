@@ -3,91 +3,103 @@
 {% block title %}CVthèque JobItBetter{% endblock %}
 
 {% block body %}
+
+    <div class="offcanvas offcanvas-start bg-transparent border-0" tabindex="-1" id="offcanvasExample"
+         aria-labelledby="offcanvas2ExampleLabel">
+
+        <div class="form-offcanvas offcanvas-body d-flex align-items-center">
+
+        </div>
+    </div>
     <h1 class="w-100 d-flex justify-content-center m-0 mb-5 text-center fw-bold be-h2">
         Votre prochain talent est peut-être parmis notre <span>&nbsp CVthèque</span>
     </h1>
-    <div class="row d-flex justify-content-around">
+    <button class="btn btn-primary m-2 d-xl-none" type="button" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasExample"
+            aria-controls="offcanvasExample">
+        <i class="bi bi-funnel text-white"></i> Filtrez votre recherche
+    </button>
+    <div class="form-accordion-parent row d-flex justify-content-around">
 
-        {{ form_start(form, {
-            attr: {
-                'class': 'accordion col-3 p-0 position-relative d-none d-xl-block ',
-                'id': 'accordionExample'
-            }
-        }) }}
-            <div class="be-joboffer-card-template  sticky-element ">
-    <h2 class="py-4 fs-5 m-0 w-100 d-flex justify-content-center be-h2 ">Affinez votre <span>&nbsp
-            recherche</span></h2>
+    {{ form_start(form, {
+        attr: {
+            'class': 'form-accordion accordion p-0 position-relative col-3  ',
+            'id': 'accordionExample'
+        }
+    }) }}
+    <div class="be-joboffer-card-template  sticky-element ">
+    <h2 class="py-4 fs-5 m-0 w-100 d-flex justify-content-center bg-white be-h2 ">Affinez votre <span>&nbsp
+                    recherche</span></h2>
 
     {% set currentCategoryKey = '' %}
-                {% set currentCategoryLabel = '' %}
-                {% set categoryCounter = 0 %}
+    {% set currentCategoryLabel = '' %}
+    {% set categoryCounter = 0 %}
 
-                {% for key in form.children %}
-                    {% if key.vars.name != 'submit'  %}
+    {% for key in form.children %}
+        {% if key.vars.name != 'submit'  %}
 
-                        {% if key.vars.name starts with 'category_' %}
-            {#             Fermer la div parent précédente si nécessaire#}
-                        {% if currentCategoryKey is not empty %}
-                            </div>
-                            </div>
-                            </div>
-                        {% endif %}
-
-                        {% set categoryCounter = categoryCounter + 1 %}
-
-                        {% set currentCategoryKey = key.vars.name %}
-                        {% set currentCategoryLabel = key.vars.label %}
-                        <div class="parent accordion-item ">
-                        <h2 class="accordion-header" id="heading{{ categoryCounter }}">
-                            <button class="accordion-button p-3 fw-bold" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse{{
-                            categoryCounter }}"
-                                    aria-expanded="true" aria-controls="collapse{{ categoryCounter }}">
-                                {{ form_widget(key, {
-                                    attr: {
-                                        'class': 'd-none'
-                                    }
-                                }) }}
-                                {{ form_label(key) }}
-                            </button>
-                        </h2>
-                        <div id="collapse{{ categoryCounter }}" class="accordion-collapse collapse shhow">
-                        <div class="accordion-body d-flex flex-column justify-content-around p-2">
-                    {% else %}
-                        {% if currentCategoryKey is not empty or  key.vars.name != 'Rechercher' %}
-                            <div class="d-flex row">
-                                <div class="col-3 d-flex justify-content-center">
-                                    {{ form_widget(key) }}
-                                </div>
-                                <div class="col-9">
-                                    {{ form_label(key) }}
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endif %}
-
-                    {% endif %}
-
-                {% endfor %}
-
-            {#     Fermer la dernière div parent si nécessaire#}
+            {% if key.vars.name starts with 'category_' %}
+                {#             Fermer la div parent précédente si nécessaire#}
                 {% if currentCategoryKey is not empty %}
                     </div>
                     </div>
-                    <div class="w-100 d-flex justify-content-center">
-                        {{ form_widget(form.submit, {
-                            attr: {
-                                'class': 'be-secondary-button my-3',
-                                'id': 'submit'
-                            }
-                        }) }}
                     </div>
                 {% endif %}
-            </div>
 
-        {{ form_end(form) }}
+                {% set categoryCounter = categoryCounter + 1 %}
 
-        </div>
+                {% set currentCategoryKey = key.vars.name %}
+                {% set currentCategoryLabel = key.vars.label %}
+                <div class="parent accordion-item ">
+                <h2 class="accordion-header" id="heading{{ categoryCounter }}">
+                    <button class="accordion-button p-3 fw-bold" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{
+                            categoryCounter }}"
+                            aria-expanded="true" aria-controls="collapse{{ categoryCounter }}">
+                        {{ form_widget(key, {
+                            attr: {
+                                'class': 'd-none'
+                            }
+                        }) }}
+                        {{ form_label(key) }}
+                    </button>
+                </h2>
+                <div id="collapse{{ categoryCounter }}" class="accordion-collapse collapse shhow">
+                <div class="accordion-body d-flex flex-column justify-content-around p-2">
+            {% else %}
+                {% if currentCategoryKey is not empty or  key.vars.name != 'Rechercher' %}
+                    <div class="d-flex row">
+                        <div class="col-3 d-flex justify-content-center">
+                            {{ form_widget(key) }}
+                        </div>
+                        <div class="col-9">
+                            {{ form_label(key) }}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+        {% endif %}
+
+    {% endfor %}
+
+    {#     Fermer la dernière div parent si nécessaire#}
+    {% if currentCategoryKey is not empty %}
+    </div>
+    </div>
+    <div class="w-100 d-flex justify-content-center">
+        {{ form_widget(form.submit, {
+            attr: {
+                'class': 'be-secondary-button my-3',
+                'id': 'submit'
+            }
+        }) }}
+    </div>
+    {% endif %}
+    </div>
+    </div>
+
+    {{ form_end(form) }}
 
         <div class="col-10 col-md-7 col-xl-6 ">
                 <ul class="be-joboffer-card-template-ul w-100 m-0 p-0">
