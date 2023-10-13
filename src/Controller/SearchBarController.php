@@ -15,10 +15,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class SearchBarController extends AbstractController
 {
     #[Route('/search/all', name: 'app_joboffer_search_all', methods: ['GET', 'POST'])]
-    public function searchAll(JobofferRepository $jobofferRepository): Response
-    {
+    public function searchAll(
+        JobofferRepository $jobofferRepository,
+        PaginatorInterface $paginator,
+        Request $request
+    ): Response {
+        $joboffers = $jobofferRepository->findAll();
+        $joboffers = $paginator->paginate(
+            $joboffers,
+            $request->query->getInt('page', 1),
+            10
+        );
         return $this->render('joboffer/search.html.twig', [
-            'joboffers' => $jobofferRepository->findAll(),
+            'joboffers' => $joboffers,
         ]);
     }
 

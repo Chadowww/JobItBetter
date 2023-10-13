@@ -21,9 +21,13 @@ class Category
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Job::class)]
     private Collection $jobs;
 
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Technology::class, orphanRemoval: true)]
+    private Collection $technologies;
+
     public function __construct()
     {
         $this->jobs = new ArrayCollection();
+        $this->technologies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -75,7 +79,36 @@ class Category
 
     public function __toString(): string
     {
-        // TODO: Implement __toString() method.
         return $this->getName();
+    }
+
+    /**
+     * @return Collection<int, Technology>
+     */
+    public function getTechnologies(): Collection
+    {
+        return $this->technologies;
+    }
+
+    public function addTechnology(Technology $technology): static
+    {
+        if (!$this->technologies->contains($technology)) {
+            $this->technologies->add($technology);
+            $technology->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTechnology(Technology $technology): static
+    {
+        if ($this->technologies->removeElement($technology)) {
+            // set the owning side to null (unless already changed)
+            if ($technology->getCategory() === $this) {
+                $technology->setCategory(null);
+            }
+        }
+
+        return $this;
     }
 }

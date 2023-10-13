@@ -39,3 +39,8 @@ if (document.querySelector('.be-banner-search')) {
     window.addEventListener('resize', ajusterHauteurEnfant);
     ajusterHauteurEnfant();
 }
+
+
+function goBack() {
+    window.history.back();
+}

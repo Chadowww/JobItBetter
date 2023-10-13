@@ -9,84 +9,89 @@
     <h2 class="be-h2 text-center">Mes <span>candidats</span></h2>
     <div class="container m-auto d-flex justify-content-around align-items-center my-5">
         <ul class="be-joboffer-card-template-ul be-user-h1-fav ps-0">
-            {% for joboffer in company.joboffers %}
-                <li>
-                    <div class="card be-joboffer-card-template mb-4 w-100 dropdown">
-                        <div class="card-body" data-bs-toggle="dropdown" aria-expanded="false">
-                            <div class="row">
-                                <h5 class="card-title text-secondary fs-6 col-10">{{ joboffer.company.name }}</h5>
-                            </div>
-                            <h5 class="card-title mb-3 fs-5">{{ joboffer.contract.type }} - {{ joboffer.title }}</h5>
-                            <div class="d-flex flex-column-reverse">
-                                <footer class="text-secondary fs-6">{{ joboffer.city }} / {{ joboffer.salary.min }}€ - {{ joboffer.salary.max }}€</footer>
-                                <div class="d-flex flex-row justify-content-between">
-                                    <footer class="text-secondary w-50 fs-6">Annonce postée le {{ joboffer.createdAt|date('d/m/Y') }}</footer>
-                                    <a class="be-secondary-button w-15 fs-5" href="{{ path('app_joboffer_show', {id:
-                                        joboffer.id}) }}">Voir l'offre</a>
+            {% if company.joboffers is not empty%}
+                {% for joboffer in company.joboffers %}
+                    <li>
+                        <div class="card be-joboffer-card-template mb-4 w-100 dropdown">
+                            <div class="card-body" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="row">
+                                    <h5 class="card-title text-secondary fs-6 col-10">{{ joboffer.company.name }}</h5>
+                                </div>
+                                <h5 class="card-title mb-3 fs-5">{{ joboffer.contract.type }} - {{ joboffer.title }}</h5>
+                                <div class="d-flex flex-column-reverse">
+                                    <footer class="text-secondary fs-6">{{ joboffer.city }} / {{ joboffer.salary.min }}€ - {{ joboffer.salary.max }}€</footer>
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <footer class="text-secondary w-50 fs-6">Annonce postée le {{ joboffer.createdAt|date('d/m/Y') }}</footer>
+                                        <a class="be-secondary-button w-15 fs-5" href="{{ path('app_joboffer_show', {id:
+                                            joboffer.id}) }}">Voir l'offre</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="accordion" id="accordionExample">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingOne">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseOne{{ joboffer.id }}" aria-expanded="false"
-                                            aria-controls="collapseOne{{ joboffer.id }}">
-                                        Voir les candidats ({{ joboffer.candidate | length }})
-                                    </button>
-                                </h2>
-                                <div id="collapseOne{{ joboffer.id }}" class="accordion-collapse collapse " aria-labelledby="headingOne{{ joboffer.id }}" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        {% if joboffer.candidate is empty  %}
-                                            <div class="text-center">
-                                                <p>Aucun candidat</p>
-                                            </div>
-
-                                        {% else %}
-                                            {% for candidate in joboffer.candidate %}
-                                                <div class="d-flex justify-content-between">
-                                                    <div class="text-center w-25">
-                                                        {{ candidate.firstname }}
-                                                        {{ candidate.lastname }}
-                                                    </div>
-                                                    <div class="text-center w-25">
-                                                        {{ candidate.email }}
-                                                    </div>
-
-                                                    {% if candidate.phone is empty %}
-                                                        <div class="text-center w-25">
-                                                            Aucun numéro
-                                                        </div>
-                                                    {% else %}
-                                                        <div class="text-center w-25">
-                                                            {{ candidate.phone }}
-                                                        </div>
-                                                    {% endif %}
-
-                                                    {% if candidate.resumes is empty %}
-                                                        <div class="text-center w-25">
-                                                            <p>Aucun CV</p>
-                                                        </div>
-                                                    {% else %}
-                                                        {% for resume in candidate.resumes | slice (0,1) %}
-                                                            <div class="text-center w-25">
-                                                                <a target="_blank" href="{{ path('app_resume_read',  {'id': resume.id}) }}">voir le CV</a>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
-
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseOne{{ joboffer.id }}" aria-expanded="false"
+                                                aria-controls="collapseOne{{ joboffer.id }}">
+                                            Voir les candidats ({{ joboffer.candidate | length }})
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne{{ joboffer.id }}" class="accordion-collapse collapse " aria-labelledby="headingOne{{ joboffer.id }}" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            {% if joboffer.candidate is empty  %}
+                                                <div class="text-center">
+                                                    <p>Aucun candidat</p>
                                                 </div>
-                                            {% endfor %}
-                                        {% endif %}
+
+                                            {% else %}
+                                                {% for candidate in joboffer.candidate %}
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="text-center w-25">
+                                                            {{ candidate.firstname }}
+                                                            {{ candidate.lastname }}
+                                                        </div>
+                                                        <div class="text-center w-25">
+                                                            {{ candidate.email }}
+                                                        </div>
+
+                                                        {% if candidate.phone is empty %}
+                                                            <div class="text-center w-25">
+                                                                Aucun numéro
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="text-center w-25">
+                                                                {{ candidate.phone }}
+                                                            </div>
+                                                        {% endif %}
+
+                                                        {% if candidate.resumes is empty %}
+                                                            <div class="text-center w-25">
+                                                                <p>Aucun CV</p>
+                                                            </div>
+                                                        {% else %}
+                                                            {% for resume in candidate.resumes | slice (0,1) %}
+                                                                <div class="text-center w-25">
+                                                                    <a target="_blank" href="{{ path('app_resume_read',  {'id': resume.id}) }}">voir le CV</a>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
 
-            {% endfor %}
-
+                {% endfor %}
+            {% else %}
+                <div class="text-center">
+                    <p>Aucune offre publiée</p>
+                </div>
+            {% endif %}
         </ul>
     </div>
 {% endblock %}

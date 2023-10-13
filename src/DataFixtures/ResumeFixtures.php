@@ -27,7 +27,7 @@ use Faker\Factory;
             $resume->setPath('assets/uploads/resumes/CVKevindavoust.pdf');
 
             for ($j = 0; $j < 7; $j++) {
-                $technology = $this->getReference('technology_' . random_int(0, 49));
+                $technology = $this->getReference('technology_' . random_int(1, 46));
                 $resume->addTechnology($technology);
                 $manager->persist($technology);
             }
