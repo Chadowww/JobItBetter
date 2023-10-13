@@ -15,7 +15,7 @@
         Votre prochain talent est peut-être parmis notre <span>&nbsp CVthèque</span>
     </h1>
 
-    <div class="w-100 d-flex justify-content-center flex-wrap">
+    <div class="w-50 m-auto d-flex justify-content-center flex-wrap">
         {% for parameter in app.request.query.keys %}
             {% if parameter != 'submit' %}
                 <span class="badge badge-info bg-info m-1 m-md-2 fs-6">{{ parameter }}</span>
