@@ -11,6 +11,10 @@ import './styles/app.scss';
 import './js/search_navbar.js';
 import './js/favlist.js';
 import './js/alerte.js';
+import './bootstrap';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import './js/salarySlider.js';
+
 
 const $ = require('jquery');
 // this "modifies" the jquery module: adding behavior to it
@@ -22,9 +26,7 @@ require('bootstrap');
 // require('bootstrap/js/dist/popover');
 
 // start the Stimulus application
-import './bootstrap';
 
-import 'bootstrap-icons/font/bootstrap-icons.css';
 
 if (document.querySelector('.be-banner-search')) {
     const parent = document.querySelector('.be-banner-home');
@@ -46,17 +48,16 @@ function moveElement(node)
     let accordion = document.querySelector('.form-accordion');
     let offcanvas = document.querySelector('.form-offcanvas');
     let screenSize = window.innerWidth;
-
+    let parent = document.querySelector('.form-accordion-parent');
+    let firstChild = parent.firstChild;
     if (screenSize < 1200) {
         offcanvas.appendChild(accordion);
-        accordion.classList.remove('col-3')
+        parent.classList.remove('col-3')
     }
     if (screenSize >= 1200) {
-        let parent = document.querySelector('.form-accordion-parent');
-        let firstChild = parent.firstChild;
         // parent.appendChild(accordion);
         parent.insertBefore(accordion, firstChild);
-        accordion.classList.add('col-3')
+       parent.classList.add('col-3')
     }
 }
     addEventListener('DOMContentLoaded', moveElement)
