@@ -19,7 +19,8 @@
                                 </div>
                                 <h5 class="card-title mb-3 fs-5">{{ joboffer.contract.type }} - {{ joboffer.title }}</h5>
                                 <div class="d-flex flex-column-reverse">
-                                    <footer class="text-secondary fs-6">{{ joboffer.city }} / {{ joboffer.salary.min }}€ - {{ joboffer.salary.max }}€</footer>
+                                    <footer class="text-secondary fs-6">{{ joboffer.city }} / {{ joboffer.salaryMin
+                                        }}€ - {{ joboffer.salaryMax }}€</footer>
                                     <div class="d-flex flex-row justify-content-between">
                                         <footer class="text-secondary w-50 fs-6">Annonce postée le {{ joboffer.createdAt|date('d/m/Y') }}</footer>
                                         <a class="be-secondary-button w-15 fs-5" href="{{ path('app_joboffer_show', {id:
