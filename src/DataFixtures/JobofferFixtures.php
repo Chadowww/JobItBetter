@@ -74,7 +74,8 @@ class JobofferFixtures extends Fixture implements DependentFixtureInterface
                 ->setDescription($offer)
                 ->setCompany($this->getReference('company_' . $numberCompany))
                 ->setJob($this->getReference('job_' . $numberJob))
-                ->setSalary($this->getReference('salary_' . $numberSalary))
+                ->setSalaryMin($this->getReference('salary_' . $numberSalary)->getMin())
+                ->setSalaryMax($this->getReference('salary_' . $numberSalary)->getMax())
                 ->setCity($city)
                 ->setContract($this->getReference('contract_' . $numberContract));
 
