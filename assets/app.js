@@ -52,12 +52,12 @@ function moveElement(node)
     let firstChild = parent.firstChild;
     if (screenSize < 1200) {
         offcanvas.appendChild(accordion);
-        parent.classList.remove('col-3')
+        accordion.classList.remove('col-3')
     }
     if (screenSize >= 1200) {
         // parent.appendChild(accordion);
         parent.insertBefore(accordion, firstChild);
-       parent.classList.add('col-3')
+        accordion.classList.add('col-3')
     }
 }
     addEventListener('DOMContentLoaded', moveElement)
