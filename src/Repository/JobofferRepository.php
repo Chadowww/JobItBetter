@@ -7,7 +7,9 @@ use App\Entity\Company;
 use App\Entity\Joboffer;
 use App\Entity\Search;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * @extends ServiceEntityRepository<Joboffer>
@@ -92,25 +94,52 @@ class JobofferRepository extends ServiceEntityRepository
 
     public function findByFilter(FilterData $data): array
     {
+        $query = $this->getFilterQuery($data, false);
+        $query->orderBy('jo.createdAt', 'DESC');
+        $query = $query->getQuery();
+
+        return $query->getResult();
+    }
+
+    /**
+     * @return integer[] Returns an array of salary
+     */
+    public function findMinMaxSalary(FilterData $data): array
+    {
         $query = $this->createQueryBuilder('jo')
-            ->join('jo.salary', 's')
+            ->select('MIN(jo.salaryMin) as min', 'MAX(jo.salaryMax) as max')
+            ->getQuery()
+            ->getScalarResult();
+        return [(int)$query[0]['min'], (int)$query[0]['max']];
+    }
+
+    private function getFilterQuery(FilterData $data, bool $ignoreSalary = false): QueryBuilder
+    {
+        $query = $this->createQueryBuilder('jo')
+            ->select('jo')
             ->join('jo.contract', 'c');
 
         if ($data->q !== null) {
             $query->where('jo.title LIKE :q')
                 ->setParameter('q', '%' . $data->q . '%');
         }
-        if ($data->minSalary !== null) {
-            $query->andWhere('s.min >= :minSalary')
+        if ($data->minSalary !== null && $ignoreSalary === false) {
+            $query->andWhere('jo.salaryMin >= :minSalary')
                 ->setParameter('minSalary', $data->minSalary);
         }
-        if ($data->maxSalary !== null) {
-            $query->andWhere('s.max <= :maxSalary')
+        if ($data->maxSalary !== null && $ignoreSalary === false) {
+            $query->andWhere('jo.salaryMax <= :maxSalary')
                 ->setParameter('maxSalary', $data->maxSalary);
         }
         if ($data->contract !== null) {
-            $query->andWhere('c.id IN (:contract)')
-                ->setParameter('contract', $data->contract);
+            $contracts = [];
+            foreach ($data->contract as $contract) {
+                $contracts[] = $contract->getId();
+            }
+            if ($contracts !== []) {
+                $query->andWhere('jo.contract IN (:contract)')
+                    ->setParameter('contract', $contracts);
+            }
         }
         if ($data->company !== null) {
             $query->andWhere('jo.company = :company')
@@ -121,38 +150,11 @@ class JobofferRepository extends ServiceEntityRepository
             foreach ($data->city as $city) {
                 $cityNames[] = $city->getCity();
             }
-            $query->andWhere('jo.city IN (:cities)')
-                ->setParameter('cities', $cityNames);
+            if ($cityNames !== []) {
+                $query->andWhere('jo.city IN (:city)')
+                    ->setParameter('city', $cityNames);
+            }
         }
-
-
-        $query->orderBy('jo.createdAt', 'DESC');
-        $query = $query->getQuery();
-
-        return $query->getResult();
+        return $query   ;
     }
-//    /**
-//     * @return Joboffer[] Returns an array of Joboffer objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('j')
-//            ->andWhere('j.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('j.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Joboffer
-//    {
-//        return $this->createQueryBuilder('j')
-//            ->andWhere('j.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

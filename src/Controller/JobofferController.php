@@ -200,30 +200,20 @@ class JobofferController extends AbstractController
         $form = $this->createForm(JobofferFilterType::class, $data);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
             $joboffer = $jobofferRepository->findByFilter($data);
+            [$min, $max] = $jobofferRepository->findMinMaxSalary($data);
             $joboffer = $paginator->paginate(
                 $joboffer,
                 1,
                 10
             );
-            return $this->render('joboffer/companyfilter.html.twig', [
-                'joboffers' => $joboffer,
-                'lastResumes' => $resumeRepository->lastResumes(),
-                'form' => $form->createView(),
-            ]);
-        }
-        $company = $jobofferRepository->findBy(['company' => $id]);
-        $company = $paginator->paginate(
-            $company,
-            1,
-            10
-        );
 
         return $this->render('joboffer/companyfilter.html.twig', [
-            'joboffers' => $company,
+            'joboffers' => $joboffer,
             'lastResumes' => $resumeRepository->lastResumes(),
             'form' => $form->createView(),
+            'min' => $min,
+            'max' => $max,
         ]);
     }
 }

@@ -24,8 +24,9 @@ Mes offres d'emploi publiées
                                 </div>
                                 <h5 class="card-title mb-3 fs-5">{{ joboffer.contract.type }} - {{ joboffer.title }}</h5>
                                 <div class="d-flex flex-column-reverse">
-                                    {% if joboffer.salary.min is defined %}
-                                        <footer class="text-secondary fs-6">{{ joboffer.city }} / {{ joboffer.salary.min }}€ - {{ joboffer.salary.max }}€</footer>
+                                    {% if joboffer.salaryMin is defined %}
+                                        <footer class="text-secondary fs-6">{{ joboffer.city }} / {{ joboffer
+                                            .salaryMin }}€ - {{ joboffer.salaryMax }}€</footer>
                                     {% endif %}
                                     <div class="d-flex flex-row justify-content-between">
                                         <footer class="text-secondary w-50 fs-6">Annonce postée le {{ joboffer.createdAt|date('d/m/Y') }}</footer>

@@ -19,7 +19,7 @@ class JobofferFilterType extends AbstractType
             ->add('q', null, [
                 'label' => false,
                 'attr' => [
-                    'placeholder' => 'Rechercher'
+                    'placeholder' => 'Que recherchez-vous?'
                 ],
                 'required' => false,
             ])
@@ -38,7 +38,7 @@ class JobofferFilterType extends AbstractType
                 'required' => false,
             ])
             ->add('contract', EntityType::class, [
-                'label' => false,
+                'label' => true,
                 'attr' => [
                     'placeholder' => 'Type de contrat'
                 ],
@@ -51,7 +51,7 @@ class JobofferFilterType extends AbstractType
                 ->add('city', CityAutocompleteField::class, [
                     'label' => false,
                     'attr' => [
-                        'placeholder' => 'Ville'
+                        'placeholder' => 'Dans quelle villes?'
                     ],
                     'required' => false,
                 ])
