@@ -4,15 +4,10 @@ namespace App\Controller;
 
 use App\Data\FilterData;
 use App\Form\JobofferFilterType;
-use App\Form\SearchOfferType;
-use App\Repository\JobofferRepository;
-use App\Repository\ResumeRepository;
-use App\Repository\SearchRepository;
+use App\Repository\{JobofferRepository, ResumeRepository};
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{Request, Response};
 use Symfony\Component\Routing\Annotation\Route;
 
 class SearchBarController extends AbstractController
