@@ -1,25 +1,24 @@
-<div class="be-joboffer-card-template-container d-flex justify-content-around">
-    <ul class="be-joboffer-card-template-ul p-0">
-        {% if joboffers.0 is not defined %}
-        <h1>Pas de résultats pour votre recherche</h1>
+<div class="col-10 col-md-7 col-xl-6 px-2">
+    <ul class="be-joboffer-card-template-ul w-100 m-0 px-2">
+        {% if joboffers is empty %}
+            <h2 class="text-center mt-5">Aucun résultat pour votre recherche</h2>
         {% endif %}
         {% for joboffer in joboffers %}
-
-            <li>
-                <div class="card be-joboffer-card-template mb-4 w-100">
+            <li class="mb-3">
+                <div class="card be-joboffer-card-template w-100 px-2">
                     <div class="card-body">
                         <div class="row">
                             <h5 class="card-title text-secondary fs-6 col-10">{{ joboffer.company.name }}</h5>
-                            {% if is_granted('ROLE_USER') and not is_granted('ROLE_COMPANY')%}
-                            <a class="col-2" id="favlist" href="{{ path('app_joboffer_favlist', {id: joboffer.id})}}" onclick="addToFavlist(event)">
-                                <i class=" fa-2x bi {{ app.user.isInFavlist(joboffer) ? 'bi-bookmark-x-fill' : 'bi-bookmark-plus' }}"></i>
-                            </a>
+                            {% if is_granted('ROLE_USER')%}
+                                <a class="col-2" id="favlist" href="{{ path('app_joboffer_favlist', {id: joboffer.id})}}" onclick="addToFavlist(event)">
+                                    <i class=" fa-2x bi {{ app.user.isInFavlist(joboffer) ? 'bi-bookmark-x-fill' : 'bi-bookmark-plus' }}"></i>
+                                </a>
                             {% endif %}
                         </div>
                         <h5 class="card-title mb-3 fs-5">{{ joboffer.contract.type }} - {{ joboffer.title }}</h5>
                         <div class="d-flex flex-column-reverse">
-                            <footer class="text-secondary fs-6">{{ joboffer.city }} / {{ joboffer.salaryMin }}€ - {{
-                                joboffer.salaryMax }}€</footer>
+                            <footer class="text-secondary fs-6">{{ joboffer.city }} / {{ joboffer.salaryMin }}€ -
+                                {{ joboffer.salaryMax }}€</footer>
                             <div class="d-flex flex-row justify-content-between">
                                 <footer class="text-secondary w-50 fs-6">Annonce postée le {{ joboffer.createdAt|date('d/m/Y') }}</footer>
                                 <a href="{{ path('app_joboffer_show', {id: joboffer.id}) }}" class="be-secondary-button w-15 fs-5">Voir l'offre</a>
@@ -27,8 +26,9 @@
                         </div>
                     </div>
                 </div>
-            </li>
 
+            </li>
         {% endfor %}
     </ul>
 </div>
+

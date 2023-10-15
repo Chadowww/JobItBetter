@@ -3,24 +3,15 @@
 namespace App\Controller;
 
 use App\Data\FilterData;
-use App\Entity\Company;
-use App\Entity\Joboffer;
-use App\Entity\Salary;
-use App\Form\JobofferApplyType;
-use App\Form\JobofferFilterType;
-use App\Form\JobofferType;
-use App\Repository\CompanyRepository;
-use App\Repository\JobofferRepository;
-use App\Repository\ResumeRepository;
-use App\Repository\SalaryRepository;
+use App\Entity\{Joboffer, Salary};
+use App\Form\{JobofferApplyType, JobofferFilterType, JobofferType};
+use App\Repository\{JobofferRepository, SalaryRepository, ResumeRepository};
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{File\File, Request,Response};
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Mime\Part\DataPart;
