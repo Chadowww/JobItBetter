@@ -10,7 +10,7 @@ class FilterData
     /**
      * @var string
      */
-    public $q = '';
+    public $q;
 
     /**
      * @var integer
