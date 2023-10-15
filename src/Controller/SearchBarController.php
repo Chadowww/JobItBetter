@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Data\FilterData;
+use App\Form\JobofferFilterType;
 use App\Form\SearchOfferType;
 use App\Repository\JobofferRepository;
+use App\Repository\ResumeRepository;
 use App\Repository\SearchRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,78 +17,32 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SearchBarController extends AbstractController
 {
-    #[Route('/search/all', name: 'app_joboffer_search_all', methods: ['GET', 'POST'])]
-    public function searchAll(
-        JobofferRepository $jobofferRepository,
-        PaginatorInterface $paginator,
-        Request $request
-    ): Response {
-        $joboffers = $jobofferRepository->findAll();
-        $joboffers = $paginator->paginate(
-            $joboffers,
-            $request->query->getInt('page', 1),
-            10
-        );
-        return $this->render('joboffer/search.html.twig', [
-            'joboffers' => $joboffers,
-        ]);
-    }
-
     #[Route('/search', name: 'app_joboffer_search', methods: ['GET'])]
     public function search(
-        FormFactoryInterface $formFactory,
         JobofferRepository $jobofferRepository,
+        ResumeRepository $resumeRepository,
         Request $request,
         PaginatorInterface $paginator
     ): Response {
 
-        $form = $formFactory->create(SearchOfferType::class, null, [
-            'method' => 'GET',
-        ]);
+        $data = new FilterData();
+        $form = $this->createForm(JobofferFilterType::class, $data);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $credentials = $form->getData();
-            $results = $jobofferRepository->search($credentials);
-
-            $results = $paginator->paginate(
-                $results,
-                $request->query->getInt('page', 1),
-                10
-            );
-            return $this->render('joboffer/search.html.twig', [
-                'joboffers' => $results,
-            ]);
-        }
-
-
-        return $this->render('barSearch/_form.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    #[Route('/search/ma-recherche/{id}', name: 'app_joboffer_Mysearch', methods: ['GET', 'POST'])]
-    public function mySearch(
-        Request $request,
-        JobofferRepository $jobofferRepository,
-        SearchRepository $searchRepository,
-        PaginatorInterface $paginator
-    ): Response {
-        $searchId = $request->request->get('searchId');
-        $search = $searchRepository->find($searchId);
-
-        if (!$search) {
-            throw $this->createNotFoundException('La recherche n\'existe pas');
-        }
-
-        $result =  $jobofferRepository->findByMySearch($search);
-        $result = $paginator->paginate(
-            $result,
-            $request->query->getInt('page', 1),
+        $joboffer = $jobofferRepository->findByFilter($data);
+        [$min, $max] = $jobofferRepository->findMinMaxSalary($data);
+        $joboffer = $paginator->paginate(
+            $joboffer,
+            1,
             10
         );
-        return $this->render('joboffer/search.html.twig', [
-            'joboffers' => $result,
+
+        return $this->render('joboffer/companyfilter.html.twig', [
+            'joboffers' => $joboffer,
+            'lastResumes' => $resumeRepository->lastResumes(),
+            'form' => $form->createView(),
+            'min' => $min,
+            'max' => $max,
         ]);
     }
 }
