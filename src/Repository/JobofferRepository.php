@@ -49,7 +49,7 @@ class JobofferRepository extends ServiceEntityRepository
         $credential = implode(' ', $credentials);
         $query = $this->createQueryBuilder('j');
         if ($credentials != null) {
-            $query->where('MATCH_AGAINST(j.title, j.city) AGAINST(:words boolean) > 0')
+            $query->where('MATCH_AGAINST(j.title, j.city, j.description) AGAINST(:words boolean) > 0')
                 ->setParameter('words', $credential);
         }
         return $query->getQuery()->getResult();
@@ -118,9 +118,8 @@ class JobofferRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('jo')
             ->select('jo')
             ->join('jo.contract', 'c');
-
         if ($data->q !== null) {
-            $query->where('jo.title LIKE :q')
+            $query->where('MATCH_AGAINST(jo.title, jo.city ,jo.description) AGAINST(:q boolean) > 0')
                 ->setParameter('q', '%' . $data->q . '%');
         }
         if ($data->minSalary !== null && $ignoreSalary === false) {
