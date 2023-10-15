@@ -15,30 +15,38 @@
                 }
             }) }}
         </div>
-        <div class="mt-3 d-flex justify-content-around">
+        <div class="mt-3 d-flex justify-content-around flex-wrap">
+            <h5 class="w-100 text-center">Salaire</h5>
             {{ form_widget(this.form.minSalary, {
                 attr: {
                     class: 'w-25',
-                    value: this.min
                 }
             }) }}
 
             {{ form_widget(this.form.maxSalary, {
                 attr: {
                     class: 'w-25',
-                    value: this.max
                 }
             }) }}
         </div>
         <div class="d-flex justify-content-center">
             <div id="salary-slider" class="my-2 w-75" data-min="{{ this.min }}" data-max="{{ this.max }}"></div>
         </div>
-        <div class="my-3 d-flex justify-content-around flex-wrap">
-            {{ form_widget(this.form.contract,{
-                attr: {
-                    class: 'w-75 d-flex justify-content-around flex-wrap'
-                }
-            }) }}
+        <div class="my-3 d-flex justify-content-center form-check row">
+            {% for checkbox in this.form.contract.children %}
+               <div class="col-6 text-center d-flex row">
+                   {{ form_widget(checkbox, {
+                       attr: {
+                           class: 'form-check-input col-2 p-0',
+                       }
+                   }) }}
+                   {{ form_label(checkbox, checkbox.vars.label, {
+                       attr: {
+                           class: 'form-check-label col-10 p-0',
+                       }
+                   }) }}
+               </div>
+            {% endfor %}
         </div>
         <div class="my-3 d-flex justify-content-center">
             {{ form_widget(this.form.city, {
