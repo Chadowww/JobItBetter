@@ -1,23 +1,20 @@
-{{ form_start(form, {'attr': {'class': 'd-flex justify-content-between be-form-search', 'role': 'search'},
-    'action' : path('app_joboffer_search')
-})
-}}
-<div class="be-search-bar-input-container d-flex flex-column justify-content-center">
-    <label class="h2" for="what"><b>Quoi ?</b></label>
-    {{ form_widget(form.title, {'attr': {'class': 'form-control me-2 p-0 be-search-bar-input', 'placeholder':
-        'Quel métier cherches-tu ?', 'aria-label': 'Search', 'name': 'what',
-    }}) }}
-</div>
+<form class=" d-flex justify-content-between be-form-search" role="search" action="{{ path('app_joboffer_search') }}">
+    <div class="be-search-bar-input-container d-flex flex-column justify-content-center">
+        <label class="h2" for="what"><b>Quoi ?</b></label>
+        <input type="text" class="form-control me-2 p-0 be-search-bar-input"
+                placeholder="Quel métier cherches-tu ?" aria-label="Seach"
+                name="what">
+    </div>
 
-<div class="be-search-bar-input-2-container d-flex flex-column justify-content-center">
-    <label class="h2" for="where"><b>Où ?</b></label>
-    {{ form_widget(form.city, {'attr': {'class': 'form-control p-0 me-2 be-search-bar-input-2', 'placeholder':
-        'Dans quelle ville ?', 'aria-label': 'Search', 'name': 'where',
-    }}) }}
-</div>
-<div>
-    <button class="be-search-button be-search-home " type="submit">
-    <i class="fa-solid fa-magnifying-glass" style="color: whitesmoke; font-size: 20px"></i>
-    </button>
-</div>
-{{ form_end(form) }}
+    <div class="be-search-bar-input-2-container d-flex flex-column justify-content-center">
+        <label class="h2" for="where"><b>Où ?</b></label>
+        <input type="text" class="form-control p-0 me-2 be-search-bar-input-2"
+                placeholder="Dans quelle ville ?" aria-label="Search" name="where">
+
+    </div>
+    <div>
+        <button class="be-search-button be-search-home " type="submit">
+            <i class="fa-solid fa-magnifying-glass" style="color: whitesmoke; font-size: 20px"></i>
+        </button>
+    </div>
+</form>
