@@ -43,7 +43,6 @@
     </button>
 
     <div class=" form-accordion-parent d-flex justify-content-around ">
-
         {{ component('FilterComponent', {form, min, max})}}
 
         {{ include ('_includes/joboffer-card-template.html.twig') }}
@@ -52,7 +51,7 @@
             <div class="sticky-element">
 
                 {% if app.user.id is defined %}
-                    {{ component('AlerteComponent', { 'applicant': app.user.id, null }) }}
+                    {{ component('AlerteComponent', { 'applicant': app.user.id }) }}
                 {% endif %}
 
                 <div class="card be-card-candidatures" style="width: 100%; min-height: 13.75rem;">

@@ -3,13 +3,10 @@
 namespace App\Repository;
 
 use App\Data\FilterData;
-use App\Entity\Company;
-use App\Entity\Joboffer;
-use App\Entity\Search;
+use App\Entity\{Joboffer, Search};
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * @extends ServiceEntityRepository<Joboffer>
@@ -94,7 +91,7 @@ class JobofferRepository extends ServiceEntityRepository
 
     public function findByFilter(FilterData $data): array
     {
-        $query = $this->getFilterQuery($data, false);
+        $query = $this->getFilterQuery($data);
         $query->orderBy('jo.createdAt', 'DESC');
         $query = $query->getQuery();
 
@@ -106,7 +103,7 @@ class JobofferRepository extends ServiceEntityRepository
      */
     public function findMinMaxSalary(FilterData $data): array
     {
-        $query = $this->createQueryBuilder('jo')
+        $query = $this->getFilterQuery($data, true)
             ->select('MIN(jo.salaryMin) as min', 'MAX(jo.salaryMax) as max')
             ->getQuery()
             ->getScalarResult();
