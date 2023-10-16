@@ -3,9 +3,10 @@
 namespace App\Controller;
 
 use App\Data\FilterData;
-use App\Entity\{Joboffer, Salary};
+use App\Services\NewJobOfferService;
+use App\Entity\{Joboffer};
 use App\Form\{JobofferApplyType, JobofferFilterType, JobofferType};
-use App\Repository\{JobofferRepository, SalaryRepository, ResumeRepository};
+use App\Repository\{JobofferRepository, ResumeRepository};
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use App\Repository\UserRepository;
@@ -21,25 +22,25 @@ class JobofferController extends AbstractController
 {
     private JobofferRepository $jobofferRepository;
     private ResumeRepository $resumeRepository;
-    private SalaryRepository $salaryRepository;
     private UserRepository $userRepository;
     private EntityManagerInterface $manager;
     private MailerInterface $mailer;
+    private NewJobOfferService $newJobOfferService;
 
     public function __construct(
         JobofferRepository $jobofferRepository,
         ResumeRepository $resumeRepository,
-        SalaryRepository $salaryRepository,
         UserRepository $userRepository,
         EntityManagerInterface $manager,
-        MailerInterface $mailer
+        MailerInterface $mailer,
+        NewJobOfferService $newJobOfferService
     ) {
         $this->jobofferRepository = $jobofferRepository;
         $this->resumeRepository = $resumeRepository;
-        $this->salaryRepository = $salaryRepository;
         $this->userRepository = $userRepository;
         $this->manager = $manager;
         $this->mailer = $mailer;
+        $this->newJobOfferService = $newJobOfferService;
     }
 
     #[Route('/', name: 'app_joboffer_index', methods: ['GET'])]
@@ -64,24 +65,12 @@ class JobofferController extends AbstractController
     public function new(Request $request): Response
     {
         $joboffer = new Joboffer();
-        $salary = new Salary();
         $form = $this->createForm(JobofferType::class, $joboffer);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $salaryMin = $form->get('salaryMin')->getData();
-            $salaryMax = $form->get('salaryMax')->getData();
+            $id = $this->newJobOfferService->createNewJobOffer($form->getData())->getId();
 
-            $joboffer->setSalaryMin($salaryMin);
-            $joboffer->setSalaryMax($salaryMax);
-            $salary->setMin($salaryMin);
-            $salary->setMax($salaryMax);
-
-            $this->salaryRepository->save($salary, true);
-            $joboffer->setSalary($salary);
-            $this->jobofferRepository->save($joboffer, true);
-
-            $id = $joboffer->getId();
             return $this->redirectToRoute('app_joboffer_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
 
