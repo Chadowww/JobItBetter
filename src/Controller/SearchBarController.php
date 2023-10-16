@@ -5,36 +5,36 @@ namespace App\Controller;
 use App\Data\FilterData;
 use App\Form\JobofferFilterType;
 use App\Repository\{JobofferRepository, ResumeRepository};
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\{Request, Response};
 use Symfony\Component\Routing\Annotation\Route;
 
 class SearchBarController extends AbstractController
 {
-    #[Route('/search', name: 'app_joboffer_search', methods: ['GET'])]
-    public function search(
+    private JobofferRepository $jobofferRepository;
+    private ResumeRepository $resumeRepository;
+    public function __construct(
         JobofferRepository $jobofferRepository,
         ResumeRepository $resumeRepository,
-        Request $request,
-        PaginatorInterface $paginator
-    ): Response {
+    ) {
+        $this->jobofferRepository = $jobofferRepository;
+        $this->resumeRepository = $resumeRepository;
+    }
+
+    #[Route('/search', name: 'app_joboffer_search', methods: ['GET'])]
+    public function search(Request $request): Response
+    {
 
         $data = new FilterData();
         $form = $this->createForm(JobofferFilterType::class, $data);
         $form->handleRequest($request);
 
-        $joboffer = $jobofferRepository->findByFilter($data);
-        [$min, $max] = $jobofferRepository->findMinMaxSalary($data);
-        $joboffer = $paginator->paginate(
-            $joboffer,
-            1,
-            10
-        );
+        $joboffer = $this->jobofferRepository->findByFilter($data);
+        [$min, $max] = $this->jobofferRepository->findMinMaxSalary($data);
 
         return $this->render('joboffer/companyfilter.html.twig', [
             'joboffers' => $joboffer,
-            'lastResumes' => $resumeRepository->lastResumes(),
+            'lastResumes' => $this->resumeRepository->lastResumes(),
             'form' => $form->createView(),
             'min' => $min,
             'max' => $max,
