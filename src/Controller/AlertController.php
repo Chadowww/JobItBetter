@@ -11,27 +11,36 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AlertController extends AbstractController
 {
+    private Alert $alert;
+    private UserRepository $userRepository;
+
+    public function __construct(Alert $alert, UserRepository $userRepository)
+    {
+        $this->alert = $alert;
+        $this->userRepository = $userRepository;
+    }
+
     #[Route('/{id}/alert/', name: 'app_alerte_edit')]
-    public function readAlert(Alert $alert, UserRepository $userRepository): Response
+    public function readAlert(): Response
     {
         /**
          * @var User $user
          */
         $user = $this->getUser();
 
-        if ($user->getAlert($alert) === true) {
-            $user->readAlert($alert);
+        if ($user->getAlert($this->alert) === true) {
+            $user->readAlert($this->alert);
         }
-        $userRepository->save($user, true);
+        $this->userRepository->save($user, true);
 
         return $this->json([
-            'success' => $user->getAlerts()->contains($alert),
-            'state' => $alert->getState(),
-            'id' => $alert->getId(),
+            'success' => $user->getAlerts()->contains($this->alert),
+            'state' => $this->alert->getState(),
+            'id' => $this->alert->getId(),
         ]);
     }
     #[Route('/{id}/alert/delete', name: 'app_alerte_delete')]
-    public function deleteAlert(Alert $alert, UserRepository $userRepository): Response
+    public function deleteAlert(): Response
     {
         /**
          * @var User $user
@@ -39,14 +48,14 @@ class AlertController extends AbstractController
         $user = $this->getUser();
         $alertId = null;
 
-        if ($user->getAlert($alert) === true) {
-            $alertId = $alert->getId();
-            $user->removeAlert($alert);
+        if ($user->getAlert($this->alert) === true) {
+            $alertId = $this->alert->getId();
+            $user->removeAlert($this->alert);
         }
-        $userRepository->save($user, true);
+        $this->userRepository->save($user, true);
 
         return $this->json([
-            'success' => !$user->getAlerts()->contains($alert),
+            'success' => !$user->getAlerts()->contains($this->alert),
             'id' => $alertId,
         ]);
     }
