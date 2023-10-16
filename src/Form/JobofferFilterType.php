@@ -69,7 +69,6 @@ class JobofferFilterType extends AbstractType
         $resolver->setDefaults([
             'data_class' => FilterData::class,
             'method' => 'GET',
-
             'csrf_protection' => false,
         ]);
     }
