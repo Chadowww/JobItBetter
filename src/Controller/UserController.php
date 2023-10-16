@@ -7,6 +7,7 @@ use App\Entity\Search;
 use App\Form\UserPersonalSearchType;
 use App\Repository\JobofferRepository;
 use App\Repository\SalaryRepository;
+use App\Services\SearchService;
 use DateTime;
 use App\Entity\User;
 use App\Form\UserType;
@@ -125,27 +126,15 @@ class UserController extends AbstractController
 
     #[Route('/{id}/search', name: 'app_user_search', methods: ['GET', 'POST'])]
     public function mySearch(
-        User $user,
         Request $request,
-        EntityManagerInterface $manager,
-        SalaryRepository $salaryRepository
+        User $user,
+        SearchService $searchService,
     ): Response {
         $joboffer = new Joboffer();
-        $search = new Search();
-        $user = $this->getUser();
         $form = $this->createForm(UserPersonalSearchType::class, $joboffer);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $form = $form->getData();
-            $search->setUser($user);
-            $search->setJob($form->getJob());
-            $search->setCity($form->getCity());
-            $search->setContract($form->getContract());
-            $search->setCompany($form->getCompany());
-
-            $manager->persist($search);
-            $manager->flush();
+            $searchService->addSearch($form->getData(), $user);
 
             return $this->redirectToRoute('app_user_search', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
