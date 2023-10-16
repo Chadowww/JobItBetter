@@ -7,6 +7,8 @@ use App\Entity\{Joboffer, Search};
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @extends ServiceEntityRepository<Joboffer>
@@ -18,9 +20,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class JobofferRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $paginator;
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Joboffer::class);
+        $this->paginator = $paginator;
     }
 
     public function save(Joboffer $entity, bool $flush = false): void
@@ -41,7 +45,7 @@ class JobofferRepository extends ServiceEntityRepository
         }
     }
 
-    public function search(array $credentials): array
+    public function search(array $credentials): PaginationInterface
     {
         $credential = implode(' ', $credentials);
         $query = $this->createQueryBuilder('j');
@@ -49,9 +53,16 @@ class JobofferRepository extends ServiceEntityRepository
             $query->where('MATCH_AGAINST(j.title, j.city, j.description) AGAINST(:words boolean) > 0')
                 ->setParameter('words', $credential);
         }
-        return $query->getQuery()->getResult();
+        $result = $query->getQuery();
+        $result = $result->getResult();
+
+        return $this->paginator->paginate(
+            $result,
+            1,
+            10
+        );
     }
-    public function findByCompany(): array
+    public function findByCompany(): PaginationInterface
     {
         $query = $this->createQueryBuilder('j')
             ->select('c.name, COUNT(j.id) as total', 'c.logo', 'c.id')
@@ -59,11 +70,17 @@ class JobofferRepository extends ServiceEntityRepository
             ->groupBy('c.id')
             ->orderBy('count(c)', 'DESC')
             ->setMaxResults(6)
-            ->getQuery();
-        return $query->getResult();
+            ->getQuery()
+            ->getResult();
+
+        return $this->paginator->paginate(
+            $query,
+            1,
+            10
+        );
     }
 
-    public function findByMySearch(Search $search): array
+    public function findByMySearch(Search $search): PaginationInterface
     {
         $query = $this->createQueryBuilder('jo')
             ->where('jo.company IN (
@@ -85,17 +102,27 @@ class JobofferRepository extends ServiceEntityRepository
             ->setParameter('salaryId', $search->getSalary()?->getId())
             ->setParameter('city', $search->getCity())
             ->orderBy('jo.createdAt', 'DESC')
-            ->getQuery();
-        return $query->getResult();
+            ->getQuery()
+            ->getResult();
+        return $this->paginator->paginate(
+            $query,
+            1,
+            10
+        );
     }
 
-    public function findByFilter(FilterData $data): array
+    public function findByFilter(FilterData $data): PaginationInterface
     {
         $query = $this->getFilterQuery($data);
         $query->orderBy('jo.createdAt', 'DESC');
         $query = $query->getQuery();
+        $query->getResult();
 
-        return $query->getResult();
+        return $this->paginator->paginate(
+            $query,
+            1,
+            10
+        );
     }
 
     /**
