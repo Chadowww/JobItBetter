@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Resume;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @extends ServiceEntityRepository<Resume>
@@ -16,9 +17,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ResumeRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private PaginatorInterface $paginator;
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Resume::class);
+        $this->paginator = $paginator;
     }
 
     public function save(Resume $entity, bool $flush = false): void
@@ -39,32 +42,7 @@ class ResumeRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Resume[] Returns an array of Resume objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('r.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Resume
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
-
-    public function searchResumes(array $search): array
+    public function searchResumes(array $search): \Knp\Component\Pager\Pagination\PaginationInterface
     {
         $result = [];
         foreach ($search as $key => $value) {
@@ -82,8 +60,12 @@ class ResumeRepository extends ServiceEntityRepository
                 }
             }
         }
-//        dd($result);
-        return $result;
+
+        return $this->paginator->paginate(
+            $result,
+            1,
+            10
+        );
     }
 
     public function lastResumes(): array
