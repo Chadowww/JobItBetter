@@ -3,17 +3,16 @@
 namespace App\Controller;
 
 use App\Data\FilterData;
-use App\Entity\{Joboffer, Salary};
+use App\Services\JobOfferService;
+use App\Entity\{Joboffer};
 use App\Form\{JobofferApplyType, JobofferFilterType, JobofferType};
-use App\Repository\{JobofferRepository, SalaryRepository, ResumeRepository};
+use App\Repository\{JobofferRepository, ResumeRepository};
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\{File\File, Request,Response};
+use Symfony\Component\HttpFoundation\{ Request,Response};
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/joboffer')]
@@ -21,25 +20,22 @@ class JobofferController extends AbstractController
 {
     private JobofferRepository $jobofferRepository;
     private ResumeRepository $resumeRepository;
-    private SalaryRepository $salaryRepository;
     private UserRepository $userRepository;
     private EntityManagerInterface $manager;
-    private MailerInterface $mailer;
+    private JobOfferService $jobOfferService;
 
     public function __construct(
         JobofferRepository $jobofferRepository,
         ResumeRepository $resumeRepository,
-        SalaryRepository $salaryRepository,
         UserRepository $userRepository,
         EntityManagerInterface $manager,
-        MailerInterface $mailer
+        JobOfferService $newJobOfferService
     ) {
         $this->jobofferRepository = $jobofferRepository;
         $this->resumeRepository = $resumeRepository;
-        $this->salaryRepository = $salaryRepository;
         $this->userRepository = $userRepository;
         $this->manager = $manager;
-        $this->mailer = $mailer;
+        $this->jobOfferService = $newJobOfferService;
     }
 
     #[Route('/', name: 'app_joboffer_index', methods: ['GET'])]
@@ -64,24 +60,12 @@ class JobofferController extends AbstractController
     public function new(Request $request): Response
     {
         $joboffer = new Joboffer();
-        $salary = new Salary();
         $form = $this->createForm(JobofferType::class, $joboffer);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $salaryMin = $form->get('salaryMin')->getData();
-            $salaryMax = $form->get('salaryMax')->getData();
+            $id = $this->jobOfferService->createNewJobOffer($form->getData())->getId();
 
-            $joboffer->setSalaryMin($salaryMin);
-            $joboffer->setSalaryMax($salaryMax);
-            $salary->setMin($salaryMin);
-            $salary->setMax($salaryMax);
-
-            $this->salaryRepository->save($salary, true);
-            $joboffer->setSalary($salary);
-            $this->jobofferRepository->save($joboffer, true);
-
-            $id = $joboffer->getId();
             return $this->redirectToRoute('app_joboffer_show', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
 
@@ -95,8 +79,6 @@ class JobofferController extends AbstractController
     public function show(Request $request, Joboffer $joboffer): Response
     {
         $user = $this->getUser();
-        $attachment = null;
-        $message = null;
 
         $form = null;
         if ($user !== null) {
@@ -104,29 +86,12 @@ class JobofferController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $candidate = $form->getData();
-                $candidate->addJobOffer($joboffer);
-                $this->manager->persist($candidate);
-                $this->manager->flush();
-                $message    = $request->get('message');
-                $resume = $request->get('resume');
-                $attachment = new File(
-                    $this->getParameter('kernel.project_dir') . '/public/uploads/resume/' . $resume
+                $this->manager->persist(
+                    $form->getData()->addJobOffer($joboffer)
                 );
-                $email = (new TemplatedEmail())
-                    ->from($_ENV['MAIL_ADMIN'])
-                    ->to($joboffer->getCompany()->getUser()->getEmail())
-                    ->subject('Nouvelle candidature')
-                    ->addPart(new DataPart(fopen($attachment, 'r')))
-                    ->html($this->renderView('joboffer/jobOfferEmail.html.twig', [
-                        'joboffer' => $joboffer,
-                        'user'     => $user,
-                        'message'  => $message,
-                    ]));
+                $this->manager->flush();
 
-
-                $this->mailer->send($email);
-
+                $this->jobOfferService->newCadidateMailer($user, $joboffer, $request);
                 $this->addFlash('success', 'Votre candidature a bien été envoyée !');
 
                 return $this->redirectToRoute('app_joboffer_show', [

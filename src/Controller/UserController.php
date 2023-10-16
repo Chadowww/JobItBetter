@@ -7,6 +7,7 @@ use App\Entity\Search;
 use App\Form\UserPersonalSearchType;
 use App\Repository\JobofferRepository;
 use App\Repository\SalaryRepository;
+use App\Services\SearchService;
 use DateTime;
 use App\Entity\User;
 use App\Form\UserType;
@@ -23,24 +24,38 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/user')]
 class UserController extends AbstractController
 {
+    private UserRepository $userRepository;
+    private EntityManagerInterface $manager;
+    private SearchService $searchService;
+
+    public function __construct(
+        UserRepository $userRepository,
+        EntityManagerInterface $manager,
+        SearchService $searchService
+    ) {
+        $this->userRepository = $userRepository;
+        $this->manager = $manager;
+        $this->searchService = $searchService;
+    }
+
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
-    public function index(UserRepository $userRepository): Response
+    public function index(): Response
     {
 
         return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll()
+            'users' => $this->userRepository->findAll()
         ]);
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserRepository $userRepository): Response
+    public function new(Request $request): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository->save($user, true);
+            $this->userRepository->save($user, true);
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -60,13 +75,13 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, UserRepository $userRepository): Response
+    public function edit(Request $request, User $user): Response
     {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository->save($user, true);
+            $this->userRepository->save($user, true);
 
             return $this->redirectToRoute('app_user_show', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
@@ -78,10 +93,10 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, UserRepository $userRepository): Response
+    public function delete(Request $request, User $user): Response
     {
         if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
-            $userRepository->remove($user, true);
+            $this->userRepository->remove($user, true);
         }
         $request->getSession()->invalidate();
         $this->container->get('security.token_storage')->setToken(null);
@@ -112,40 +127,24 @@ class UserController extends AbstractController
     }
 
     #[Route('/candidature/delete/{id}', name: 'app_user_candidatures_delete', methods: ['GET', 'POST'])]
-    public function candidaturesDelete(Joboffer $joboffer, EntityManagerInterface $manager): Response
+    public function candidaturesDelete(Joboffer $joboffer, User $user): Response
     {
-        $user = $this->getUser();
 
         if ($user->isCandidate($joboffer)) {
             $user->removeJoboffer($joboffer);
-            $manager->flush();
+            $this->manager->flush();
         }
         return $this->redirectToRoute('app_user_candidatures', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}/search', name: 'app_user_search', methods: ['GET', 'POST'])]
-    public function mySearch(
-        User $user,
-        Request $request,
-        EntityManagerInterface $manager,
-        SalaryRepository $salaryRepository
-    ): Response {
+    public function mySearch(Request $request, User $user): Response
+    {
         $joboffer = new Joboffer();
-        $search = new Search();
-        $user = $this->getUser();
         $form = $this->createForm(UserPersonalSearchType::class, $joboffer);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $form = $form->getData();
-            $search->setUser($user);
-            $search->setJob($form->getJob());
-            $search->setCity($form->getCity());
-            $search->setContract($form->getContract());
-            $search->setCompany($form->getCompany());
-
-            $manager->persist($search);
-            $manager->flush();
+            $this->searchService->addSearch($form->getData(), $user);
 
             return $this->redirectToRoute('app_user_search', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }

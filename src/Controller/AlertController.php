@@ -11,8 +11,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AlertController extends AbstractController
 {
+    private UserRepository $userRepository;
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     #[Route('/{id}/alert/', name: 'app_alerte_edit')]
-    public function readAlert(Alert $alert, UserRepository $userRepository): Response
+    public function readAlert(Alert $alert): Response
     {
         /**
          * @var User $user
@@ -22,7 +29,7 @@ class AlertController extends AbstractController
         if ($user->getAlert($alert) === true) {
             $user->readAlert($alert);
         }
-        $userRepository->save($user, true);
+        $this->userRepository->save($user, true);
 
         return $this->json([
             'success' => $user->getAlerts()->contains($alert),
@@ -31,7 +38,7 @@ class AlertController extends AbstractController
         ]);
     }
     #[Route('/{id}/alert/delete', name: 'app_alerte_delete')]
-    public function deleteAlert(Alert $alert, UserRepository $userRepository): Response
+    public function deleteAlert(Alert $alert): Response
     {
         /**
          * @var User $user
@@ -43,7 +50,7 @@ class AlertController extends AbstractController
             $alertId = $alert->getId();
             $user->removeAlert($alert);
         }
-        $userRepository->save($user, true);
+        $this->userRepository->save($user, true);
 
         return $this->json([
             'success' => !$user->getAlerts()->contains($alert),

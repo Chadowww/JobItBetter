@@ -2,16 +2,14 @@
 
 namespace App\Controller;
 
-use AllowDynamicProperties;
 use App\Form\CvthequeType;
 use App\Repository\ResumeRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{Request, Response};
 use Symfony\Component\Routing\Annotation\Route;
 
-#[AllowDynamicProperties] class CvthequeController extends AbstractController
+class CvthequeController extends AbstractController
 {
     private ResumeRepository $resumeRepository;
     private PaginatorInterface $paginator;
@@ -39,7 +37,6 @@ use Symfony\Component\Routing\Annotation\Route;
                 'form' => $form->createView(),
             ]);
         }
-
 
         $resumes = $this->resumeRepository->findAll();
         $resumes = $this->paginator->paginate(

@@ -13,23 +13,30 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/contract')]
 class ContractController extends AbstractController
 {
+    private ContractRepository $contractRepository;
+
+    public function __construct(ContractRepository $contractRepository)
+    {
+        $this->contractRepository = $contractRepository;
+    }
+
     #[Route('/', name: 'app_contract_index', methods: ['GET'])]
-    public function index(ContractRepository $contractRepository): Response
+    public function index(): Response
     {
         return $this->render('contract/index.html.twig', [
-            'contracts' => $contractRepository->findAll(),
+            'contracts' => $this->contractRepository->findAll(),
         ]);
     }
 
     #[Route('/new', name: 'app_contract_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ContractRepository $contractRepository): Response
+    public function new(Request $request): Response
     {
         $contract = new Contract();
         $form = $this->createForm(ContractType::class, $contract);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $contractRepository->save($contract, true);
+            $this->contractRepository->save($contract, true);
 
             return $this->redirectToRoute('app_contract_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -49,13 +56,13 @@ class ContractController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_contract_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Contract $contract, ContractRepository $contractRepository): Response
+    public function edit(Request $request, Contract $contract): Response
     {
         $form = $this->createForm(ContractType::class, $contract);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $contractRepository->save($contract, true);
+            $this->contractRepository->save($contract, true);
 
             return $this->redirectToRoute('app_contract_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -67,10 +74,10 @@ class ContractController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_contract_delete', methods: ['POST'])]
-    public function delete(Request $request, Contract $contract, ContractRepository $contractRepository): Response
+    public function delete(Request $request, Contract $contract): Response
     {
         if ($this->isCsrfTokenValid('delete' . $contract->getId(), $request->request->get('_token'))) {
-            $contractRepository->remove($contract, true);
+            $this->contractRepository->remove($contract, true);
         }
 
         return $this->redirectToRoute('app_contract_index', [], Response::HTTP_SEE_OTHER);
