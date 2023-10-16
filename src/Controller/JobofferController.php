@@ -7,7 +7,6 @@ use App\Entity\{Joboffer, Salary};
 use App\Form\{JobofferApplyType, JobofferFilterType, JobofferType};
 use App\Repository\{JobofferRepository, SalaryRepository, ResumeRepository};
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,21 +19,50 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/joboffer')]
 class JobofferController extends AbstractController
 {
+    private JobofferRepository $jobofferRepository;
+    private ResumeRepository $resumeRepository;
+    private SalaryRepository $salaryRepository;
+    private UserRepository $userRepository;
+    private EntityManagerInterface $manager;
+    private MailerInterface $mailer;
+
+    public function __construct(
+        JobofferRepository $jobofferRepository,
+        ResumeRepository $resumeRepository,
+        SalaryRepository $salaryRepository,
+        UserRepository $userRepository,
+        EntityManagerInterface $manager,
+        MailerInterface $mailer
+    ) {
+        $this->jobofferRepository = $jobofferRepository;
+        $this->resumeRepository = $resumeRepository;
+        $this->salaryRepository = $salaryRepository;
+        $this->userRepository = $userRepository;
+        $this->manager = $manager;
+        $this->mailer = $mailer;
+    }
+
     #[Route('/', name: 'app_joboffer_index', methods: ['GET'])]
-    public function index(JobofferRepository $jobofferRepository): Response
+    public function index(): Response
     {
-        return $this->render('joboffer/index.html.twig', [
-            'joboffers' => $jobofferRepository->findAll(),
+        $data = new FilterData();
+        $joboffers = $this->jobofferRepository->findByFilter($data);
+        [$min, $max] = $this->jobofferRepository->findMinMaxSalary($data);
+
+        return $this->render('joboffer/companyfilter.html.twig', [
+            'joboffers' => $joboffers,
+            'min' => $min,
+            'max' => $max,
+            'form' => $this->createForm(JobofferFilterType::class, $data)->createView(),
+            'lastResumes' => $this->resumeRepository->lastResumes(),
+
         ]);
     }
 
     #[isGranted('ROLE_COMPANY')]
     #[Route('/new', name: 'app_joboffer_new', methods: ['GET', 'POST'])]
-    public function new(
-        Request $request,
-        JobofferRepository $jobofferRepository,
-        SalaryRepository $salaryRepository
-    ): Response {
+    public function new(Request $request): Response
+    {
         $joboffer = new Joboffer();
         $salary = new Salary();
         $form = $this->createForm(JobofferType::class, $joboffer);
@@ -49,9 +77,9 @@ class JobofferController extends AbstractController
             $salary->setMin($salaryMin);
             $salary->setMax($salaryMax);
 
-            $salaryRepository->save($salary, true);
+            $this->salaryRepository->save($salary, true);
             $joboffer->setSalary($salary);
-            $jobofferRepository->save($joboffer, true);
+            $this->jobofferRepository->save($joboffer, true);
 
             $id = $joboffer->getId();
             return $this->redirectToRoute('app_joboffer_show', ['id' => $id], Response::HTTP_SEE_OTHER);
@@ -64,12 +92,8 @@ class JobofferController extends AbstractController
     }
 
     #[Route('/show/{id}', name: 'app_joboffer_show', methods: ['GET', 'POST'])]
-    public function show(
-        Joboffer $joboffer,
-        Request $request,
-        EntityManagerInterface $manager,
-        MailerInterface $mailer
-    ): Response {
+    public function show(Request $request, Joboffer $joboffer): Response
+    {
         $user = $this->getUser();
         $attachment = null;
         $message = null;
@@ -82,8 +106,8 @@ class JobofferController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 $candidate = $form->getData();
                 $candidate->addJobOffer($joboffer);
-                $manager->persist($candidate);
-                $manager->flush();
+                $this->manager->persist($candidate);
+                $this->manager->flush();
                 $message    = $request->get('message');
                 $resume = $request->get('resume');
                 $attachment = new File(
@@ -101,7 +125,7 @@ class JobofferController extends AbstractController
                     ]));
 
 
-                $mailer->send($email);
+                $this->mailer->send($email);
 
                 $this->addFlash('success', 'Votre candidature a bien été envoyée !');
 
@@ -119,18 +143,22 @@ class JobofferController extends AbstractController
 
     #[isgranted('ROLE_COMPANY')]
     #[Route('/{id}/edit', name: 'app_joboffer_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Joboffer $joboffer, JobofferRepository $jobofferRepository): Response
+    public function edit(Request $request, Joboffer $joboffer): Response
     {
         if ($this->getUser() !== $joboffer->getCompany()->getUser()) {
             $this->addFlash('danger', 'Seule l\'entreprise qui est propriétaire de l\'offre peut la modifier!');
-            return $this->redirectToRoute('app_joboffer_show', ['id' => $joboffer->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute(
+                'app_joboffer_show',
+                ['id' => $joboffer->getId()],
+                Response::HTTP_SEE_OTHER
+            );
         }
 
         $form = $this->createForm(JobofferType::class, $joboffer);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $jobofferRepository->save($joboffer, true);
+            $this->jobofferRepository->save($joboffer, true);
 
             $id = $joboffer->getId();
             return $this->redirectToRoute('app_joboffer_show', ['id' => $id], Response::HTTP_SEE_OTHER);
@@ -143,10 +171,10 @@ class JobofferController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_joboffer_delete', methods: ['POST'])]
-    public function delete(Request $request, Joboffer $joboffer, JobofferRepository $jobofferRepository): Response
+    public function delete(Request $request, Joboffer $joboffer): Response
     {
         if ($this->isCsrfTokenValid('delete' . $joboffer->getId(), $request->request->get('_token'))) {
-            $jobofferRepository->remove($joboffer, true);
+            $this->jobofferRepository->remove($joboffer, true);
         }
         $id = $joboffer->getCompany()->getId();
         return $this->redirectToRoute(
@@ -158,7 +186,7 @@ class JobofferController extends AbstractController
 
     #[isGranted('ROLE_CANDIDATE')]
     #[Route('/{id}/favlist', name: 'app_joboffer_favlist', methods: ['GET', 'POST'])]
-    public function addToFavlist(Joboffer $joboffer, UserRepository $userRepository): Response
+    public function addToFavlist(Joboffer $joboffer): Response
     {
         /** @var  \App\Entity\User $user */
         $user = $this->getUser();
@@ -169,7 +197,7 @@ class JobofferController extends AbstractController
             $user->addToFavlist($joboffer);
         }
 
-        $userRepository->save($user, true);
+        $this->userRepository->save($user, true);
 
 
         return $this->json([
@@ -178,30 +206,20 @@ class JobofferController extends AbstractController
     }
 
     #[Route('/company/{id}', name: 'app_joboffer_company_filter', methods: ['GET'])]
-    public function getJoboffersByCompany(
-        int $id,
-        JobofferRepository $jobofferRepository,
-        ResumeRepository $resumeRepository,
-        Request $request,
-        PaginatorInterface $paginator
-    ): Response {
-
+    public function getJoboffersByCompany(int $id, Request $request): Response
+    {
         $data = new FilterData();
         $data->company = $id;
         $form = $this->createForm(JobofferFilterType::class, $data);
         $form->handleRequest($request);
 
-            $joboffer = $jobofferRepository->findByFilter($data);
-            [$min, $max] = $jobofferRepository->findMinMaxSalary($data);
-            $joboffer = $paginator->paginate(
-                $joboffer,
-                1,
-                10
-            );
+            $joboffer = $this->jobofferRepository->findByFilter($data);
+            [$min, $max] = $this->jobofferRepository->findMinMaxSalary($data);
+
 
         return $this->render('joboffer/companyfilter.html.twig', [
             'joboffers' => $joboffer,
-            'lastResumes' => $resumeRepository->lastResumes(),
+            'lastResumes' => $this->resumeRepository->lastResumes(),
             'form' => $form->createView(),
             'min' => $min,
             'max' => $max,
