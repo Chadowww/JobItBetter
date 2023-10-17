@@ -20,7 +20,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[isgranted('ROLE_CANDIDATE')]
 #[Route('/user')]
 class UserController extends AbstractController
 {
@@ -38,6 +37,7 @@ class UserController extends AbstractController
         $this->searchService = $searchService;
     }
 
+    #[isgranted('ROLE_CANDIDATE')]
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(): Response
     {
@@ -66,6 +66,7 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[isgranted('ROLE_CANDIDATE')]
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
@@ -74,6 +75,7 @@ class UserController extends AbstractController
         return $this->render('user/show.html.twig');
     }
 
+    #[isgranted('ROLE_CANDIDATE')]
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user): Response
     {
@@ -101,7 +103,7 @@ class UserController extends AbstractController
         $request->getSession()->invalidate();
         $this->container->get('security.token_storage')->setToken(null);
 
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}/favoris', name: 'app_user_favlist', methods: ['GET'])]

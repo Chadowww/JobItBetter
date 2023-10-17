@@ -69,7 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinTable(name:'favlist')]
     private Collection $favlist;
 
-    #[ORM\ManyToMany(targetEntity: Joboffer::class, mappedBy: 'candidate')]
+    #[ORM\ManyToMany(targetEntity: Joboffer::class, mappedBy: 'candidate', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private Collection $joboffers;
 

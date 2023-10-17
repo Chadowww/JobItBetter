@@ -30,7 +30,7 @@ class Joboffer
     #[ORM\Column(length: 50)]
     private ?string $city = null;
 
-    #[ORM\ManyToOne(inversedBy: 'joboffers')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'joboffers')]
     private ?Company $company = null;
 
     #[ORM\ManyToOne(inversedBy: 'joboffers')]
