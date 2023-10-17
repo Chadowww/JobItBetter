@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use App\Data\FilterData;
 use App\Entity\Search;
+use App\Entity\User;
 use App\Form\SearchType;
-use App\Repository\{JobofferRepository, SearchRepository};
+use App\Services\FilterService;
+use App\Repository\{JobofferRepository, ResumeRepository, SearchRepository};
 use App\Services\SearchService;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\{Request, Response};
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,23 +17,47 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/search')]
 class SearchController extends AbstractController
 {
+    private SearchService $searchService;
+    private FilterService $filterService;
+    private JobofferRepository $jobofferRepository;
+    private ResumeRepository $resumeRepository;
+    private SearchRepository $searchRepository;
+    private EntityManagerInterface $manager;
+
+    public function __construct(
+        SearchService $searchService,
+        FilterService $filterService,
+        JobofferRepository $jobofferRepository,
+        ResumeRepository $resumeRepository,
+        SearchRepository $searchRepository,
+        EntityManagerInterface $manager
+    ) {
+        $this->searchService = $searchService;
+        $this->filterService = $filterService;
+        $this->jobofferRepository = $jobofferRepository;
+        $this->resumeRepository = $resumeRepository;
+        $this->searchRepository = $searchRepository;
+        $this->manager = $manager;
+    }
+
     #[Route('/', name: 'app_search_index', methods: ['GET'])]
-    public function index(SearchRepository $searchRepository): Response
+    public function index(): Response
     {
         return $this->render('search/index.html.twig', [
-            'searches' => $searchRepository->findAll(),
+            'searches' => $this->searchRepository->findAll(),
         ]);
     }
 
+
     #[Route('/new', name: 'app_search_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, SearchRepository $searchRepository): Response
+    public function new(Request $request): Response
     {
         $search = new Search();
         $form = $this->createForm(SearchType::class, $search);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $searchRepository->save($search, true);
+            $this->searchRepository->save($search, true);
 
             return $this->redirectToRoute('app_search_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -42,6 +68,7 @@ class SearchController extends AbstractController
         ]);
     }
 
+
     #[Route('/{id}', name: 'app_search_show', methods: ['GET'])]
     public function show(Search $search): Response
     {
@@ -50,14 +77,15 @@ class SearchController extends AbstractController
         ]);
     }
 
+
     #[Route('/{id}/edit', name: 'app_search_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Search $search, SearchRepository $searchRepository): Response
+    public function edit(Request $request, Search $search): Response
     {
         $form = $this->createForm(SearchType::class, $search);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $searchRepository->save($search, true);
+            $this->searchRepository->save($search, true);
 
             return $this->redirectToRoute('app_search_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -68,46 +96,38 @@ class SearchController extends AbstractController
         ]);
     }
 
-    #[Route('/delete/{id}', name: 'app_search_delete', methods: ['GET','POST'])]
-    public function delete(
-        Request $request,
-        Search $search,
-        SearchRepository $searchRepository,
-        EntityManagerInterface $manager,
-        SearchService $searchService
-    ): Response {
-        $user = $this->getUser();
 
-        if ($searchService->hasSearch($search, $user)) {
-            $searchService->removeSearch($search);
-            $manager->flush();
+    #[Route('/delete/{id}', name: 'app_search_delete', methods: ['GET','POST'])]
+    public function delete(Search $search, User $user): Response
+    {
+        if ($this->searchService->hasSearch($search, $user)) {
+            $this->searchService->removeSearch($search);
+            $this->manager->flush();
         }
         $this->addFlash('success', 'Votre recherche a bien été supprimée');
         return $this->redirectToRoute('app_user_search', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
     }
 
+
     #[Route('/ma-recherche/{id}', name: 'app_joboffer_Mysearch', methods: ['GET', 'POST'])]
-    public function mySearch(
-        Request $request,
-        JobofferRepository $jobofferRepository,
-        SearchRepository $searchRepository,
-        PaginatorInterface $paginator
-    ): Response {
+    public function mySearch(Request $request): Response
+    {
         $searchId = $request->request->get('searchId');
-        $search = $searchRepository->find($searchId);
+        $search = $this->searchRepository->find($searchId);
+        $data = new FilterData();
 
         if (!$search) {
             throw $this->createNotFoundException('La recherche n\'existe pas');
         }
 
-        $result =  $jobofferRepository->findByMySearch($search);
-        $result = $paginator->paginate(
-            $result,
-            $request->query->getInt('page', 1),
-            10
-        );
-        return $this->render('joboffer/search.html.twig', [
+        $result =  $this->jobofferRepository->findByMySearch($search);
+
+        return $this->render('joboffer/companyfilter.html.twig', [
             'joboffers' => $result,
+            'form' => $this->filterService->filterForm($data),
+            'min' => $this->filterService->getMinMaxSalary($data)[0],
+            'max' => $this->filterService->getMinMaxSalary($data)[1],
+            'lastResumes' => $this->resumeRepository->lastResumes(),
         ]);
     }
 }
