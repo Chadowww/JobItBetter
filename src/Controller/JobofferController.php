@@ -23,19 +23,22 @@ class JobofferController extends AbstractController
     private UserRepository $userRepository;
     private EntityManagerInterface $manager;
     private JobOfferService $jobOfferService;
+    private FilterService $filter;
 
     public function __construct(
         JobofferRepository $jobofferRepository,
         ResumeRepository $resumeRepository,
         UserRepository $userRepository,
         EntityManagerInterface $manager,
-        JobOfferService $newJobOfferService
+        JobOfferService $newJobOfferService,
+        FilterService $filter
     ) {
         $this->jobofferRepository = $jobofferRepository;
         $this->resumeRepository = $resumeRepository;
         $this->userRepository = $userRepository;
         $this->manager = $manager;
         $this->jobOfferService = $newJobOfferService;
+        $this->filter = $filter;
     }
 
     #[Route('/', name: 'app_joboffer_index', methods: ['GET'])]
@@ -54,6 +57,7 @@ class JobofferController extends AbstractController
 
         ]);
     }
+
 
     #[isGranted('ROLE_COMPANY')]
     #[Route('/new', name: 'app_joboffer_new', methods: ['GET', 'POST'])]
@@ -74,6 +78,7 @@ class JobofferController extends AbstractController
             'form' => $form,
         ]);
     }
+
 
     #[Route('/show/{id}', name: 'app_joboffer_show', methods: ['GET', 'POST'])]
     public function show(Request $request, Joboffer $joboffer): Response
@@ -106,6 +111,7 @@ class JobofferController extends AbstractController
         ]);
     }
 
+
     #[isgranted('ROLE_COMPANY')]
     #[Route('/{id}/edit', name: 'app_joboffer_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Joboffer $joboffer): Response
@@ -135,19 +141,21 @@ class JobofferController extends AbstractController
         ]);
     }
 
+
+    #[isgranted('ROLE_COMPANY')]
     #[Route('/{id}', name: 'app_joboffer_delete', methods: ['POST'])]
-    public function delete(Request $request, Joboffer $joboffer): Response
+    public function delete(int $id, Request $request, Joboffer $joboffer): Response
     {
         if ($this->isCsrfTokenValid('delete' . $joboffer->getId(), $request->request->get('_token'))) {
             $this->jobofferRepository->remove($joboffer, true);
         }
-        $id = $joboffer->getCompany()->getId();
         return $this->redirectToRoute(
             'app_company_offers',
             ['id' => $id],
             Response::HTTP_SEE_OTHER
         );
     }
+
 
     #[isGranted('ROLE_CANDIDATE')]
     #[Route('/{id}/favlist', name: 'app_joboffer_favlist', methods: ['GET', 'POST'])]
@@ -168,24 +176,24 @@ class JobofferController extends AbstractController
         ]);
     }
 
+
     #[Route('/company/{id}', name: 'app_joboffer_company_filter', methods: ['GET'])]
-    public function getJoboffersByCompany(int $id, Request $request, FilterService $filter): Response
+    public function getJoboffersByCompany(int $id, Request $request): Response
     {
         $data = new FilterData();
         $data->company = $id;
         $form = $this->createForm(JobofferFilterType::class, $data);
         $form->handleRequest($request);
 
-            $joboffer = $this->jobofferRepository->findByFilter($data);
-            [$min, $max] = $this->jobofferRepository->findMinMaxSalary($data);
+        $joboffer = $this->jobofferRepository->findByFilter($data);
 
 
         return $this->render('joboffer/companyfilter.html.twig', [
             'joboffers' => $joboffer,
             'lastResumes' => $this->resumeRepository->lastResumes(),
-            'form' => $filter->filterForm($data),
-            'min' => $min,
-            'max' => $max,
+            'form' => $this->filter->filterForm($data),
+            'min' => $this->filter->getMinMaxSalary($data)[0],
+            'max' => $this->filter->getMinMaxSalary($data)[1],
         ]);
     }
 }
