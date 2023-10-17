@@ -42,7 +42,7 @@ class Company
     #[ORM\Column(length: 255, unique: true)]
     private ?string $siret = null;
 
-    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Joboffer::class)]
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Joboffer::class, cascade: ['persist', 'remove'])]
     private Collection $joboffers;
 
     #[ORM\OneToOne(inversedBy: 'company', cascade: ['persist', 'remove'])]
