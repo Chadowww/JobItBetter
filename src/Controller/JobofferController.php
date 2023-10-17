@@ -4,14 +4,14 @@ namespace App\Controller;
 
 use App\Data\FilterData;
 use App\Services\JobOfferService;
-use App\Entity\{Joboffer};
+use App\Services\FilterService;
+use App\Entity\{Joboffer, User};
 use App\Form\{JobofferApplyType, JobofferFilterType, JobofferType};
 use App\Repository\{JobofferRepository, ResumeRepository};
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\{ Request,Response};
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -151,10 +151,8 @@ class JobofferController extends AbstractController
 
     #[isGranted('ROLE_CANDIDATE')]
     #[Route('/{id}/favlist', name: 'app_joboffer_favlist', methods: ['GET', 'POST'])]
-    public function addToFavlist(Joboffer $joboffer): Response
+    public function addToFavlist(Joboffer $joboffer, User $user): Response
     {
-        /** @var  \App\Entity\User $user */
-        $user = $this->getUser();
 
         if ($user->isInFavlist($joboffer)) {
             $user->removeFromFavlist($joboffer);
@@ -171,7 +169,7 @@ class JobofferController extends AbstractController
     }
 
     #[Route('/company/{id}', name: 'app_joboffer_company_filter', methods: ['GET'])]
-    public function getJoboffersByCompany(int $id, Request $request): Response
+    public function getJoboffersByCompany(int $id, Request $request, FilterService $filter): Response
     {
         $data = new FilterData();
         $data->company = $id;
@@ -185,7 +183,7 @@ class JobofferController extends AbstractController
         return $this->render('joboffer/companyfilter.html.twig', [
             'joboffers' => $joboffer,
             'lastResumes' => $this->resumeRepository->lastResumes(),
-            'form' => $form->createView(),
+            'form' => $filter->filterForm($data),
             'min' => $min,
             'max' => $max,
         ]);
