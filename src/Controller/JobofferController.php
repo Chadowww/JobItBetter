@@ -144,11 +144,12 @@ class JobofferController extends AbstractController
 
     #[isgranted('ROLE_COMPANY')]
     #[Route('/{id}', name: 'app_joboffer_delete', methods: ['POST'])]
-    public function delete(int $id, Request $request, Joboffer $joboffer): Response
+    public function delete(Request $request, Joboffer $joboffer): Response
     {
         if ($this->isCsrfTokenValid('delete' . $joboffer->getId(), $request->request->get('_token'))) {
             $this->jobofferRepository->remove($joboffer, true);
         }
+        $id = $joboffer->getCompany()->getId();
         return $this->redirectToRoute(
             'app_company_offers',
             ['id' => $id],
