@@ -27,17 +27,15 @@ require('bootstrap');
 
 // start the Stimulus application
 
-
-if (document.querySelector('.be-banner-search')) {
+function ajusterHauteurEnfant()
+{
     const parent = document.querySelector('.be-banner-home');
     const enfant = document.querySelector('.be-banner-search');
+    const enfantHeight = enfant.clientHeight;
+    enfant.style.transform = `translateY(${enfantHeight / 2}px) scale(0.9)`;
+}
 
-    function ajusterHauteurEnfant()
-    {
-        const enfantHeight = enfant.clientHeight;
-        enfant.style.transform = `translateY(${enfantHeight / 2}px) scale(0.9)`;
-    }
-
+if (document.querySelector('.be-banner-search')) {
     window.addEventListener('resize', ajusterHauteurEnfant);
     ajusterHauteurEnfant();
 }
@@ -55,10 +53,12 @@ function moveElement(node)
         accordion.classList.remove('col-3')
     }
     if (screenSize >= 1200) {
-        // parent.appendChild(accordion);
         parent.insertBefore(accordion, firstChild);
         accordion.classList.add('col-3')
     }
 }
+
+if (document.querySelector('.form-accordion')) {
     addEventListener('DOMContentLoaded', moveElement)
     addEventListener('resize', moveElement);
+}
