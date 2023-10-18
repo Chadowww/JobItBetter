@@ -68,10 +68,6 @@ a {
     .be-container-search {
         margin-top: 0;
     }
-
-    .be-search-div-top {
-        //margin-top: 4rem;
-    }
 }
 .alert{
     text-align: center;
@@ -79,4 +75,16 @@ a {
 
 .noUi-connect {
     background: $light-green !important;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+    font-weight: 600;
+    border: red solid 1px;
+    padding: 5px;
+    margin: 5px;
+    text-align: center;
+    border-radius: 5px;
+    width: 100%;
 }
