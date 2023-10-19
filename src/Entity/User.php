@@ -73,8 +73,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private Collection $joboffers;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Search::class)]
-    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Search::class, cascade: ['persist', 'remove'])]
     private Collection $searches;
 
     #[ORM\OneToMany(mappedBy: 'applicant', targetEntity: Alert::class, orphanRemoval: true)]
