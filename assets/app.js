@@ -14,9 +14,11 @@ import './js/alerte.js';
 import './bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './js/salarySlider.js';
+import './js/js-form-validator.js';
+import './js/js-form-validator.min.js'
+import './js/validator.js';
 
 
-const $ = require('jquery');
 // this "modifies" the jquery module: adding behavior to it
 // the bootstrap module doesn't export/return anything
 require('bootstrap');

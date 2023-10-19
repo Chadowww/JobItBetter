@@ -22,28 +22,28 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Prénom',
                 'attr' => [
                     'placeholder' => 'Entre ton prénom',
-                    'class' => 'form-control be-form-input mb-3 mb-md-5'
+                    'class' => 'form-control be-form-input mb-3 '
                 ],
             ])
             ->add('lastname', TextType::class, [
                 'label' => 'Nom',
                 'attr' => [
                     'placeholder' => 'Entre ton nom',
-                    'class' => 'form-control be-form-input mb-3 mb-md-5'
+                    'class' => 'form-control be-form-input mb-3'
                 ],
             ])
             ->add('email', TextType::class, [
                 'label' => 'Email',
                 'attr' => [
                     'placeholder' => 'exemple.email@gmail.com',
-                    'class' => 'form-control be-form-input mb-3 mb-md-5'
+                    'class' => 'form-control be-form-input mb-3 '
                 ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'label' => 'J\'accepte la politique de confidentialité des données',
                 'label_attr' => [
-                    'class' => 'be-check-label mb-3 mb-md-5'
+                    'class' => 'be-check-label mb-3 '
                 ],
                 'constraints' => [
                     new IsTrue([
@@ -51,7 +51,7 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
                 'attr' => [
-                    'class' => 'form-check-input be-form-input mb-3 mb-md-5 be-form-check-input'
+                    'class' => 'form-check-input be-form-input mb-3  be-form-check-input'
                     ]
             ])
             ->add('plainPassword', PasswordType::class, [
@@ -62,7 +62,7 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'autocomplete' => 'new-password',
                     'placeholder' => 'Entre ton mot de passe',
-                    'class' => 'form-control be-form-input mb-3 mb-md-5',
+                    'class' => 'form-control be-form-input mb-3',
                     'data-password-visibility-target' => 'input'
                 ],
                 'constraints' => [
