@@ -63,7 +63,7 @@
 
 
 
-			
+
 
 			var self = this;
 
@@ -100,10 +100,10 @@
 
 
 
-			
 
 
-			
+
+
 			// autotracking for new form elements
 			this.settings.autoTracking && ('MutationObserver' in window) && new MutationObserver(function(mutationRecords) {
 
@@ -111,7 +111,7 @@
 			        switch (mutation.type) {
 			            case 'subtree':
 			            case 'childList':
-			            	
+
 			            	var reloadFlag = false,
 			            		childsArray = [];
 
@@ -129,7 +129,7 @@
 			                		}
 			                	});
 
-			                	
+
 			                });
 			                reloadFlag && self.reload();
 			            break;
@@ -141,7 +141,7 @@
 			    subtree: true
 			});
 
-			
+
 
 			return this;
 		};
@@ -158,11 +158,15 @@
 
 
 		messages: {
-					    
+
 		    en: {
-				password:{
-					empty: 'S\'il vous plaît, entrez votre mot de passe',
-					incorrect: 'Le mot de passe doit contenir au moins 8 caractères dont au moins une lettre majuscule, une lettre minuscule et un chiffre'},
+            password:{
+              empty: 'S\'il vous plaît, entrez votre mot de passe',
+              incorrect: 'Le mot de passe doit contenir au moins 8 caractères dont au moins une lettre majuscule, une lettre minuscule et un chiffre'},
+            phoneFr: {
+              empty: 'S\'il vous plaît, entrez votre numéro de téléphone',
+              incorrect: 'Format de téléphone incorrect (exemple: 0612345678)'
+            },
 		        required: {
 		            empty: 'Le champ est obligatoire',
 		            incorrect: 'Valeur incorrecte'
@@ -232,12 +236,15 @@
 
 		// rules
 		rules: {
-			password: function (value) {
-				return new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/gi).test(value);
+			  password: function (value) {
+				  return new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/gi).test(value);
 				},
 		    required: function (value) {
 		        return '' !== value;
 		    },
+        phoneFr: function(value) {
+          return new RegExp(/^(0[1-9](?:\d{8}|-\d{2}-\d{2}-\d{2}-\d{2})|0[1-9]\.\d{2}\.\d{2}\.\d{2}\.\d{2})$/gi).test(value);
+       },
 		    notzero: function (value) {
 		        return parseInt(value, 10) > 0;
 		    },
@@ -261,7 +268,7 @@
 		        return parseInt(value, 10) <= parseInt(params[0], 10);
 		    },
 		    between: function (value, params) {
-		        
+
 		        params[1] = params[1] || 999999;
 
 		        if (this.float(value)) {
@@ -412,7 +419,7 @@
 
 			    this.showErrors(e.target);
 			    !this.settings.showErrors && this.submitCallback(this.errors, false);
-			    
+
 			}
 		},
 		_eventChangeWithDelay: function (e) {
@@ -426,7 +433,7 @@
 		        self._eventChange.apply(self, [e]);
 		    }, 400);
 		},
-		
+
 
 		applySettings: function (settings) {
 
@@ -512,12 +519,12 @@
 			this.errors = this.errors ? null : this.errors;
 
 			Object.keys(fields).forEach(function (n) {
-				
+
 				result = true;
 
 				// loop rules of this field
 				fields[n].rules && Object.keys(fields[n].rules).forEach(function (ruleIndex) {
-					
+
 					// set rule data
 					ruleName = fields[n].rules[ruleIndex][0];
 					params = fields[n].rules[ruleIndex][1];
@@ -526,7 +533,7 @@
 
 
 					switch (fields[n].handle.type) {
-						
+
 						case 'checkbox':
 							!fields[n].handle.checked && (value = '');
 						break;
@@ -541,7 +548,7 @@
 							});
 
 							if (!checked) {
-							    
+
 							    // add an error to one element
 							    Object.keys(radioBtns).forEach(function (i) {
 							    	try {
@@ -607,7 +614,7 @@
 
 						if (result) {
 						    self.hideErrors(fields[n].handle, true);
-						
+
 						} else {
 
 						    // define errors stack if not exist
@@ -703,7 +710,7 @@
 
 
 			Object.keys(this.errors).forEach(function (r) {
-				
+
 				// show error to specified field
 				if (validationField) {
 
@@ -725,7 +732,7 @@
 
 			// auto hide errors
 			if (this.settings.autoHideErrors) {
-				
+
 				// for all fields
 				if (!validationField) {
 
@@ -780,7 +787,7 @@
 		* Destroy validator
 		*/
 		destroy: function () {
-		   
+
 		    //hide errors
 		    this.hideErrors(false, true);
 
@@ -827,7 +834,7 @@
 
 			// air mode
 			this.settings.onAir && Object.keys(this.fields).forEach(function (field) {
-				
+
 				[].forEach.call(self.settings.eventsList, function (event) {
 
 					if (event === 'keyup') {
@@ -837,8 +844,8 @@
 					}
 				});
 			});
-			
-			
+
+
 		}
 	};
 
