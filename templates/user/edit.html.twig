@@ -8,18 +8,34 @@
 </div>
 <div class="be-form row g-3 col-7">
     <h2 class="be-h2">Mes <span>informations</span></h2>
-    {{ form_start(form) }}
+    {{ form_start(form, {
+        'attr': {
+           'class': 'form-user-edit',
+        }
+    }) }}
     <div class="row px-4">
         <div class="col-md-6">
-            {{ form_row(form.firstname) }}
+            {{ form_row(form.firstname, {
+                'attr': {
+                    'data-rule': 'required|minlength-2'
+                }
+            }) }}
         </div>
         <div class="col-md-6">
-            {{ form_row(form.lastname) }}
+            {{ form_row(form.lastname, {
+                'attr': {
+                    'data-rule': 'required|minlength-2'
+                }
+            }) }}
         </div>
     </div>
     <div class="row px-4">
         <div class="col-md-6">
-            {{ form_row(form.email) }}
+            {{ form_row(form.email, {
+                'attr': {
+                    'data-rule': 'required|email'
+                }
+            }) }}
         </div>
         <div class="col-md-6">
             {{ form_row(form.city) }}
@@ -30,7 +46,11 @@
             {{ form_row(form.birthday) }}
         </div>
         <div class="col-md-6">
-            {{ form_row(form.phone) }}
+            {{ form_row(form.phone, {
+                'attr': {
+                    'data-rule': 'phoneFr'
+                }
+            }) }}
         </div>
     </div>
     <div class="text-center mt-4 mb-5">
