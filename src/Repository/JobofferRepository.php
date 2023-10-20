@@ -20,7 +20,7 @@ use Knp\Component\Pager\PaginatorInterface;
  */
 class JobofferRepository extends ServiceEntityRepository
 {
-    private $paginator;
+    private PaginatorInterface $paginator;
     public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Joboffer::class);
@@ -92,14 +92,14 @@ class JobofferRepository extends ServiceEntityRepository
             ->andWhere('jo.contract IN (
         SELECT ct.id FROM App\Entity\Contract ct WHERE :contractId IS NULL OR ct.id = :contractId
     )')
-            ->andWhere('jo.salary IN (
-        SELECT s.id FROM App\Entity\Salary s WHERE :salaryId IS NULL OR s.id = :salaryId
-    )')
+//            ->andWhere('jo.salary IN (
+//        SELECT s.id FROM App\Entity\Salary s WHERE :salaryId IS NULL OR s.id = :salaryId
+//    )')
             ->andWhere(':city IS NULL OR jo.city = :city')
             ->setParameter('companyId', $search->getCompany())
             ->setParameter('jobId', $search->getJob()?->getId())
             ->setParameter('contractId', $search->getContract()?->getId())
-            ->setParameter('salaryId', $search->getSalary()?->getId())
+//            ->setParameter('salaryId', $search->getSalary()?->getId())
             ->setParameter('city', $search->getCity())
             ->orderBy('jo.createdAt', 'DESC')
             ->getQuery()
