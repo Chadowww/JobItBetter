@@ -1,0 +1,20 @@
+<div{{ attributes }}>
+    <div class="card be-card-candidatures" style="width: 100%; min-height: 13.75rem;">
+        <div class="card-header be-candidature fw-bold">
+            Nouvelles offres d'emploi
+        </div>
+        <div class="card-body">
+
+            {% for offer in this.jobOffers() %}
+                <h5 class="card-title text-center be-h2">
+                    {{ offer.company }} <br>
+                    <a href="{{ path('app_joboffer_show', {id: offer.id}) }}" class="">
+                        <span>{{ offer.title }}</span>
+                        <span>{{ offer.salaryMin }}€</span> - <span>{{ offer.salaryMax }}€</span>
+                    </a>
+                </h5>
+
+            {% endfor %}
+            <p class="card-text"></p>
+        </div>
+    </div></div>
