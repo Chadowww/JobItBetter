@@ -21,11 +21,16 @@ class SearchBarController extends AbstractController
         $this->resumeRepository = $resumeRepository;
     }
 
-    #[Route('/search', name: 'app_joboffer_search', methods: ['GET'])]
+    #[Route('/rechercher', name: 'app_joboffer_search', methods: ['GET'])]
     public function search(Request $request): Response
     {
-
         $data = new FilterData();
+        /** @var array<string, string> $queryParams */
+        $queryParams = (array) $request->query->all();
+        if (isset($request->query->all()['what'])) {
+            $data->q = implode(' ', $queryParams);
+        }
+
         $form = $this->createForm(JobofferFilterType::class, $data);
         $form->handleRequest($request);
 
