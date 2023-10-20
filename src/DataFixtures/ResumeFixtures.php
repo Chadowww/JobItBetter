@@ -24,7 +24,7 @@ use Faker\Factory;
         for ($i = 0; $i < 40; $i++) {
             $resume = new Resume();
             $resume->setName($faker->jobTitle);
-            $resume->setPath('assets/uploads/resumes/CVKevindavoust.pdf');
+            $resume->setPath('CVKevindavoust.pdf');
 
             for ($j = 0; $j < 7; $j++) {
                 $technology = $this->getReference('technology_' . random_int(1, 46));
