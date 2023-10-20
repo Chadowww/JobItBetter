@@ -1,0 +1,20 @@
+<div{{ attributes }}>
+    <div class="card be-card-candidatures" style="width: 100%; min-height: 13.75rem;">
+        <div class="card-header be-candidature fw-bold">
+            Nouveaux CV arrivés
+        </div>
+        <div class="card-body">
+
+            {% for resume in this.resume() %}
+                <h5 class="card-title text-center be-h2">
+                    {{ resume.name }} <br>
+                    <a href="{{ path('app_resume_read', {id: resume.id}) }}" class="">
+                        <span>{{ resume.getUser.getFirstName }} {{ resume.getUser.getLastName }}</span>
+                    </a>
+                </h5>
+
+            {% endfor %}
+            <p class="card-text"></p>
+        </div>
+    </div>
+</div>
