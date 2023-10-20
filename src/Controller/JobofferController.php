@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Data\FilterData;
+use App\Services\AlertService;
 use App\Services\JobOfferService;
 use App\Services\FilterService;
 use App\Entity\{Joboffer, User};
@@ -24,6 +25,7 @@ class JobofferController extends AbstractController
     private EntityManagerInterface $manager;
     private JobOfferService $jobOfferService;
     private FilterService $filter;
+    private AlertService $alertService;
 
     public function __construct(
         JobofferRepository $jobofferRepository,
@@ -31,7 +33,8 @@ class JobofferController extends AbstractController
         UserRepository $userRepository,
         EntityManagerInterface $manager,
         JobOfferService $newJobOfferService,
-        FilterService $filter
+        FilterService $filter,
+        AlertService $alertService
     ) {
         $this->jobofferRepository = $jobofferRepository;
         $this->resumeRepository = $resumeRepository;
@@ -39,6 +42,7 @@ class JobofferController extends AbstractController
         $this->manager = $manager;
         $this->jobOfferService = $newJobOfferService;
         $this->filter = $filter;
+        $this->alertService = $alertService;
     }
 
     #[Route('/', name: 'app_joboffer_index', methods: ['GET'])]
@@ -96,6 +100,7 @@ class JobofferController extends AbstractController
                 );
                 $this->manager->flush();
 
+                $this->alertService->addAlertCompany($joboffer->getCompany()->getUser(), $joboffer->getCompany());
                 $this->jobOfferService->newCadidateMailer($user, $joboffer, $request);
                 $this->addFlash('success', 'Votre candidature a bien été envoyée !');
 

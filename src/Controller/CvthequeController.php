@@ -26,11 +26,7 @@ class CvthequeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $resumes = $this->resumeRepository->searchResumes($form->getData());
-            $resumes = $this->paginator->paginate(
-                $resumes,
-                $request->query->getInt('page', 1),
-                10
-            );
+
             return $this->render('cvtheque/index.html.twig', [
                 'resumes' => $resumes,
                 'lastResumes' => $this->resumeRepository->lastResumes(),
