@@ -17,7 +17,7 @@ import './js/salarySlider.js';
 import './js/js-form-validator.js';
 import './js/js-form-validator.min.js'
 import './js/validator.js';
-
+import 'chart.js/dist/Chart.min.js';
 
 // this "modifies" the jquery module: adding behavior to it
 // the bootstrap module doesn't export/return anything
