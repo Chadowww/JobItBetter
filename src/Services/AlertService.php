@@ -33,7 +33,7 @@ class AlertService
     {
         $this->alert->setApplicant($user);
         $this->alert->setEmployer($company);
-        $this->alert->setMessage('vous avez un nouveau candidat?');
+        $this->alert->setMessage('a un nouveau candidat?');
         $this->alert->setState(true);
         $this->entityManager->persist($this->alert);
         $this->entityManager->flush();
