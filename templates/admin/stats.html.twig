@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>Cv disponible</h1>
+                {{ render_chart(chartResume, {
+
+                }) }}
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h1>Salaire par poste</h1>
+                {{ render_chart(chartOffers, {
+
+                }) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h1>Salaire par poste</h1>
+                {{ render_chart(chartSalary, {
+
+                }) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
