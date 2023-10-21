@@ -43,7 +43,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setFirstname($faker->firstName());
             $user->setLastname($faker->lastName());
             $user->setEmail('user' . $i . '@jobitbetter.com');
-            $user->setPassword($this->hasher->hashPassword($user, 'user'));
+            $user->setPassword($this->hasher->hashPassword($user, 'Fw7jzpdr7!'));
             $user->setRoles(['ROLE_CANDIDATE']);
             $this->addReference('user_' . $i, $user);
             $user->addResume($this->getReference('resume_' . $i));
@@ -57,7 +57,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $admin->setFirstname($faker->firstName());
         $admin->setLastname($faker->lastName());
         $admin->setEmail('admin@jobitbetter.com');
-        $admin->setPassword($this->hasher->hashPassword($admin, 'admin'));
+        $admin->setPassword($this->hasher->hashPassword($admin, 'Fw7jzpdr7!'));
         $admin->setRoles(['ROLE_ADMIN']);
         //pour le test a effacer pour la démo
         $admin->setIsVerified(true);
