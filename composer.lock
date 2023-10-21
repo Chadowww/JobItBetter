@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f97b733c8f08a90e6ab6bdc9fe982f00",
+    "content-hash": "d875156b56f8a7ac2b059a2e8453b780",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -403,16 +403,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.7.0",
+            "version": "3.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "00d03067f07482f025d41ab55e4ba0db5eca2cdf"
+                "reference": "5b7bd66c9ff58c04c5474ab85edce442f8081cb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/00d03067f07482f025d41ab55e4ba0db5eca2cdf",
-                "reference": "00d03067f07482f025d41ab55e4ba0db5eca2cdf",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/5b7bd66c9ff58c04c5474ab85edce442f8081cb2",
+                "reference": "5b7bd66c9ff58c04c5474ab85edce442f8081cb2",
                 "shasum": ""
             },
             "require": {
@@ -496,7 +496,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.7.0"
+                "source": "https://github.com/doctrine/dbal/tree/3.7.1"
             },
             "funding": [
                 {
@@ -512,7 +512,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-09-26T20:56:55+00:00"
+            "time": "2023-10-06T05:06:20+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -7127,6 +7127,74 @@
             "time": "2023-05-23T14:45:45+00:00"
         },
         {
+            "name": "symfony/stimulus-bundle",
+            "version": "v2.12.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/stimulus-bundle.git",
+                "reference": "e0e19de8df4d5b2bed57328ae69ef7904df660c7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/stimulus-bundle/zipball/e0e19de8df4d5b2bed57328ae69ef7904df660c7",
+                "reference": "e0e19de8df4d5b2bed57328ae69ef7904df660c7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony/config": "^5.4|^6.0",
+                "symfony/dependency-injection": "^5.4|^6.0",
+                "symfony/finder": "^5.4|^6.0",
+                "symfony/http-kernel": "^5.4|^6.0",
+                "twig/twig": "^2.15.3|^3.4.3"
+            },
+            "require-dev": {
+                "symfony/asset-mapper": "^6.3",
+                "symfony/framework-bundle": "^5.4|^6.0",
+                "symfony/phpunit-bridge": "^5.4|^6.0",
+                "symfony/twig-bundle": "^5.4|^6.0",
+                "zenstruck/browser": "^1.4"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\UX\\StimulusBundle\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Integration with your Symfony app & Stimulus!",
+            "keywords": [
+                "symfony-ux"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/stimulus-bundle/tree/v2.12.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-08-28T18:00:50+00:00"
+        },
+        {
             "name": "symfony/stopwatch",
             "version": "v6.3.0",
             "source": {
@@ -7869,6 +7937,86 @@
                 }
             ],
             "time": "2023-09-13T14:01:24+00:00"
+        },
+        {
+            "name": "symfony/ux-chartjs",
+            "version": "v2.12.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/ux-chartjs.git",
+                "reference": "49b7da8110de44433d71360688ecef3636288105"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/ux-chartjs/zipball/49b7da8110de44433d71360688ecef3636288105",
+                "reference": "49b7da8110de44433d71360688ecef3636288105",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony/config": "^5.4|^6.0",
+                "symfony/dependency-injection": "^5.4|^6.0",
+                "symfony/http-kernel": "^5.4|^6.0",
+                "symfony/stimulus-bundle": "^2.9.1"
+            },
+            "conflict": {
+                "symfony/flex": "<1.13"
+            },
+            "require-dev": {
+                "symfony/framework-bundle": "^5.4|^6.0",
+                "symfony/phpunit-bridge": "^5.4|^6.0",
+                "symfony/twig-bundle": "^5.4|^6.0",
+                "symfony/var-dumper": "^5.4|^6.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "thanks": {
+                    "name": "symfony/ux",
+                    "url": "https://github.com/symfony/ux"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\UX\\Chartjs\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Titouan Galopin",
+                    "email": "galopintitouan@gmail.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Chart.js integration for Symfony",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "symfony-ux"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/ux-chartjs/tree/v2.12.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-07-20T16:58:50+00:00"
         },
         {
             "name": "symfony/ux-live-component",
@@ -9636,16 +9784,16 @@
         },
         {
             "name": "composer/pcre",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/pcre.git",
-                "reference": "4bff79ddd77851fe3cdd11616ed3f92841ba5bd2"
+                "reference": "00104306927c7a0919b4ced2aaa6782c1e61a3c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/pcre/zipball/4bff79ddd77851fe3cdd11616ed3f92841ba5bd2",
-                "reference": "4bff79ddd77851fe3cdd11616ed3f92841ba5bd2",
+                "url": "https://api.github.com/repos/composer/pcre/zipball/00104306927c7a0919b4ced2aaa6782c1e61a3c9",
+                "reference": "00104306927c7a0919b4ced2aaa6782c1e61a3c9",
                 "shasum": ""
             },
             "require": {
@@ -9687,7 +9835,7 @@
             ],
             "support": {
                 "issues": "https://github.com/composer/pcre/issues",
-                "source": "https://github.com/composer/pcre/tree/3.1.0"
+                "source": "https://github.com/composer/pcre/tree/3.1.1"
             },
             "funding": [
                 {
@@ -9703,7 +9851,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-11-17T09:50:14+00:00"
+            "time": "2023-10-11T07:11:09+00:00"
         },
         {
             "name": "composer/xdebug-handler",
@@ -10709,16 +10857,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.38",
+            "version": "1.10.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "5302bb402c57f00fb3c2c015bac86e0827e4b691"
+                "reference": "d9dedb0413f678b4d03cbc2279a48f91592c97c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/5302bb402c57f00fb3c2c015bac86e0827e4b691",
-                "reference": "5302bb402c57f00fb3c2c015bac86e0827e4b691",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d9dedb0413f678b4d03cbc2279a48f91592c97c4",
+                "reference": "d9dedb0413f678b4d03cbc2279a48f91592c97c4",
                 "shasum": ""
             },
             "require": {
@@ -10767,7 +10915,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-06T14:19:14+00:00"
+            "time": "2023-10-17T15:46:26+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",
@@ -13070,5 +13218,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
