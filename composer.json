@@ -46,6 +46,7 @@
         "symfony/translation": "6.3.*",
         "symfony/twig-bundle": "6.3.*",
         "symfony/ux-autocomplete": "^2.9",
+        "symfony/ux-chartjs": "^2.12",
         "symfony/ux-live-component": "^2.12",
         "symfony/ux-twig-component": "^2.9",
         "symfony/ux-typed": "^2.10",
@@ -95,7 +96,7 @@
     },
     "scripts": {
         "auto-scripts": {
-            "php -dmemory_limit=256 bin/console cache:clear": "script",
+            "php -d memory_limit=512M bin/console cache:clear": "script",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "ckeditor:install": "symfony-cmd"
         },
