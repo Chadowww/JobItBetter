@@ -63,33 +63,3 @@ class MatchAgainst extends FunctionNode
         return sprintf('MATCH (%s) AGAINST (%s)', implode(', ', $fields), $against);
     }
 }
-//La classe que vous avez fournie est une classe personnalisée MatchAgainst qui étend
-// la classe FunctionNode de Doctrine. Cette classe est utilisée pour créer une fonction
-// personnalisée MATCH AGAINST pour les requêtes DQL.
-//
-//
-//      protected $pathExp: Cette propriété est utilisée pour stocker les expressions
-//      de chemin (Path Expressions) fournies en tant qu'arguments à la fonction MATCH AGAINST.
-//      Une expression de chemin représente une référence à une propriété ou une relation d'une entité dans une
-//      requête DQL.
-//
-//      protected $against: Cette propriété est utilisée pour stocker l'argument against de la fonction
-//      MATCH AGAINST, qui représente la chaîne de recherche.
-//
-//       protected $booleanMode: Cette propriété est utilisée pour indiquer si le mode booléen (IN BOOLEAN MODE)
-//       est activé pour la recherche.
-//
-//      protected $queryExpansion: Cette propriété est utilisée pour indiquer si l'expansion de requête
-//      (WITH QUERY EXPANSION) est activée pour la recherche.
-//
-//      La méthode parse(Parser $parser): Cette méthode est utilisée pour analyser la syntaxe de la
-//      fonction MATCH AGAINST dans une requête DQL. Elle extrait les expressions de chemin et les options
-//      (against, boolean, expand) fournies  en tant qu'arguments à la fonction.
-//
-//      La méthode getSql(SqlWalker $walker): Cette méthode est utilisée pour générer la partie SQL correspondante
-//      de la fonction MATCH AGAINST dans une requête SQL. Elle utilise les expressions de chemin et les options
-//      analysées pour construire la clause SQL MATCH (...) AGAINST (...) avec les options correspondantes.
-//
-//      En résumé, cette classe personnalisée permet d'étendre les fonctionnalités de Doctrine en ajoutant une
-//      fonction MATCH AGAINST personnalisée aux requêtes DQL, qui peut être utilisée pour effectuer des recherches
-//      en texte intégral.

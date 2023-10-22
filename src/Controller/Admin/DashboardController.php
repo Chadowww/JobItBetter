@@ -14,6 +14,7 @@ use App\Repository\CategoryRepository;
 use App\Repository\JobofferRepository;
 use App\Repository\JobRepository;
 use App\Repository\TechnologyRepository;
+use App\Services\ChartService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -28,9 +29,6 @@ class DashboardController extends AbstractDashboardController
 {
     public function __construct(
         private AdminUrlGenerator $adminUrlGenerator,
-        private TechnologyRepository $technologyRepository,
-        private JobofferRepository $jobofferRepository,
-        private JobRepository $jobRepository,
     ) {
     }
 
@@ -45,100 +43,13 @@ class DashboardController extends AbstractDashboardController
         return $this->redirect($url);
     }
     #[Route('/admin/stats', name: 'app_admin_stats')]
-    public function stats(ChartBuilderInterface $chartBuilder): Response
+    public function stats(ChartService $chart): Response
     {
-        $technologies = $this->technologyRepository->findAll();
-        $joboffers = $this->jobofferRepository->findAll();
-        $jobs = $this->jobRepository->findAll();
-
-        $chartResume = $chartBuilder->createChart(Chart::TYPE_POLAR_AREA);
-        $chartResume->setData([
-            'labels' => array_map(fn($technologies) => $technologies->getName(), $technologies),
-            'datasets' => [
-                [
-                    'label' => 'Nombre de CV',
-                    'backgroundColor' => [
-                        'rgb(255, 99, 132)',
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(153, 102, 255)',
-                        'rgb(255, 159, 64)',
-                    ],
-                    'data' => array_map(fn($technologies) => $technologies->getResumes()->count(), $technologies),
-                ],
-            ],
-        ]);
-        $chartResume->setOptions([
-            'maintainAspectRatio' => true,
-            'scales' => [
-                'yAxes' => [
-                    [
-                        'ticks' => [
-                            'beginAtZero' => true,
-                        ],
-                    ],
-                ],
-            ],
-            'title' => 'Nombre de CV par technologies',
-        ]);
-
-        $chartOffers = $chartBuilder->createChart(Chart::TYPE_BAR);
-        $chartOffers->setData([
-            'labels' => array_map(fn($jobs) => $jobs->getName(), $jobs),
-            'datasets' => [
-                [
-                    'label' => 'Nombre d\'offres d\'emploi',
-                    'backgroundColor' => [
-                        'rgb(255, 99, 132)',
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(153, 102, 255)',
-                        'rgb(255, 159, 64)',
-                    ],
-                    'data' => array_map(fn($jobs) => $jobs->getJoboffers()->count(), $this->jobRepository->findAll()),
-                ],
-            ],
-        ]);
-        $chartOffers->setOptions([
-            'maintainAspectRatio' => true,
-            'scales' => [
-                'yAxes' => [
-                    [
-                        'ticks' => [
-                            'beginAtZero' => true,
-                        ],
-                    ],
-                ],
-            ],
-        ]);
-
-        $chartSalary = $chartBuilder->createChart(Chart::TYPE_BAR);
-        $chartSalary->setData([
-            'labels' => array_map(fn($joboffers) => $joboffers->getJob()->getName(), $joboffers),
-            'datasets' => [
-                [
-                    'label' => 'Salaire minimum',
-                    'backgroundColor' => [
-                        'rgb(255, 99, 132)',
-                    ],
-                    'data' => array_map(fn($joboffers) => $joboffers->getSalaryMin(), $joboffers),
-                ],
-                [
-                    'label' => 'Salaire maximum',
-                    'backgroundColor' => [
-                        'rgb(54, 162, 235)',
-                    ],
-                    'data' => array_map(fn($joboffers) => $joboffers->getSalaryMax(), $joboffers),
-                ]
-            ],
-        ]);
-
         return $this->render('admin/stats.html.twig', [
-            'chartResume' => $chartResume,
-            'chartOffers' => $chartOffers,
-            'chartSalary' => $chartSalary,
+            'chartResume' => $chart->chartResumes(),
+            'chartOffers' => $chart->chartOffers(),
+            'chartSalary' => $chart->chartSalary(),
+            'chartUsers' => $chart->chartUsers(),
         ]);
     }
 

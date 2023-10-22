@@ -180,4 +180,14 @@ class JobofferRepository extends ServiceEntityRepository
         }
         return $query   ;
     }
+
+    public function getSalaryByJob(): array
+    {
+        $query = $this->createQueryBuilder('jo')
+            ->join('jo.job', 'j')
+            ->groupBy('j.id')
+            ->getQuery()
+            ->getResult();
+        return $query;
+    }
 }

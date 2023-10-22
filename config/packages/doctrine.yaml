@@ -18,6 +18,8 @@ doctrine:
         dql:
            string_functions:
                 MATCH_AGAINST: App\Extensions\Doctrine\MatchAgainst
+                DATEDIFF: App\Extensions\Doctrine\DateDiff
+                NOW: App\Extensions\Doctrine\Now
 
 
 when@test:

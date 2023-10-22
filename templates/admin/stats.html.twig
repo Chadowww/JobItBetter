@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h1>Cv disponible</h1>
+                <h1>Etats des compétences</h1>
                 {{ render_chart(chartResume, {
 
                 }) }}
@@ -15,7 +15,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <h1>Salaire par poste</h1>
+                <h1>Nombre d'offre par métiers</h1>
                 {{ render_chart(chartOffers, {
 
                 }) }}
@@ -25,6 +25,14 @@
             <div class="col-12">
                 <h1>Salaire par poste</h1>
                 {{ render_chart(chartSalary, {
+
+                }) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h1>répartition par age des candidate</h1>
+                {{ render_chart(chartUsers, {
 
                 }) }}
             </div>

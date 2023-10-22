@@ -45,6 +45,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setEmail('user' . $i . '@jobitbetter.com');
             $user->setPassword($this->hasher->hashPassword($user, 'Fw7jzpdr7!'));
             $user->setRoles(['ROLE_CANDIDATE']);
+            $user->setBirthday($faker->dateTimeBetween('-65 years', '-18 years'));
+            $user->setCity($faker->city());
             $this->addReference('user_' . $i, $user);
             $user->addResume($this->getReference('resume_' . $i));
             $user->addResume($this->getReference('resume_' . $i));
