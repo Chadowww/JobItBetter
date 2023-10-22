@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -56,34 +58,21 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->save($user, true);
     }
 
-//    /**
-//     * @return User[] Returns an array of User objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?User
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
     public function isVerified(User $user): bool
     {
-        $user->isVerified();
-
         return $user->isVerified();
+    }
+
+    public function countByAge(int $int, int $int1): int
+    {
+        return $this->createQueryBuilder('u')
+           ->select('COUNT(u.id)')
+                ->where(
+                    'DATEDIFF(NOW(), u.birthday) / 365.25 >=:start  AND DATEDIFF(NOW(), u.birthday) / 365.25 <=:end'
+                )
+                ->setParameter('start', $int)
+                ->setParameter('end', $int1)
+                ->getQuery()
+                ->getSingleScalarResult();
     }
 }
