@@ -38,7 +38,7 @@ class SearchService
 
         return $this;
     }
-    public function hasSearch(Search $search, User $user): bool
+    public function hasSearch(Search $search, UserInterface $user): bool
     {
         return $search->getUser() === $user;
     }
