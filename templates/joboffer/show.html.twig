@@ -4,50 +4,65 @@
 {% block title %}{{ joboffer.job.name }} - {{ joboffer.city }}{% endblock %}
 
 {% block body %}
-    <div class="m-auto be-banner-offer d-flex justify-content-center position-md-relative ">
+    <div class="be-background-banner" style="background-image:url({{ img }});"></div>
 
-        {% if not is_granted('ROLE_COMPANY') and app.user.isInFavlist is defined %}
-        <div class="position-absolute top-0 end-0 mt-2 mt-md-1 me-1">
-            <a onclick="addToFavlist(event)" id="favlist" href="{{ path('app_joboffer_favlist', {id: joboffer.id}) }}">
-            <i class="fa-2x bi {{ app.user.isInFavlist(joboffer) ? 'bi-bookmark-x-fill text-light' : 'bi-bookmark-plus text-light' }}"></i>
-            </a></div>
-        {% endif %}
-        {#  <img class="img-responsive be-img-UniqueOffer" src="{{ asset('build/images/Bordeaux_job.jpg') }}" alt="">#}
-        <div class="bg-transparent border border-0 w-auto h-100 card d-inline-flex align-items-center justify-content-center">
-            <h5 class="text-white fs-3 card-title">{{ joboffer.contract.type }}</h5>
-            <p class="text-white fw-bold fs-1 card-text">{{ joboffer.job.name }}</p>
-            <div class="text-white fs-5 fw-bold d-lg-none  ">{{ joboffer.company.name }}</div>
-            <p class="pt-2 text-white fs-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-geo-alt"
-                     viewBox="0 0 16 16">
-                    <path
-                        d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                    <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                </svg> {{ joboffer.city }}</p>
-            {% if app.user and not is_granted('ROLE_COMPANY') %}
-                <a href="#be-apply-form" class="fs-5 be-apply-button ">Postuler</a>
+    <section class="position-relative">
+        <div class="m-auto be-front-banner d-flex justify-content-center position-md-relative mb-5">
+            {% if not is_granted('ROLE_COMPANY') and app.user.isInFavlist is defined %}
+                <div class="position-absolute top-0 end-0 mt-2 mt-md-1 me-1">
+                    <a onclick="addToFavlist(event)" id="favlist" href="{{ path('app_joboffer_favlist', {id: joboffer.id}) }}">
+                        <i class="fa-2x bi {{ app.user.isInFavlist(joboffer) ? 'bi-bookmark-x-fill text-light' : 'bi-bookmark-plus text-light' }}"></i>
+                    </a></div>
             {% endif %}
-            <div class=" be-card-joboffer position-absolute d-none d-sm-none d-md-none d-lg-block ">
-                <div class="w-auto fs-5 fw-bold be-cardText-jobofferCompany ">{{ joboffer.company.name }}</div>
+
+            <div class="bg-transparent border border-0 w-auto h-100 card d-inline-flex align-items-center justify-content-center">
+                <h1 class="text-white fs-3 fw-bolder card-title"> {{ joboffer.job.name }}: {{ joboffer.title }}</h1>
+
+                <div class="text-white fs-5 fw-bold d-lg-none  ">{{ joboffer.company.name }}</div>
+
+                <div class="text-white fs-5 fw-bold">{{ joboffer.salaryMin}}€ - {{ joboffer.salaryMax}}€</div>
+
+                <div class="w-100 d-flex justify-content-evenly align-items-center">
+                    <div class="d-flex align-items-baseline">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" class="bi
+                        bi-geo-alt"
+                             viewBox="0 0 16 16">
+                            <path
+                                d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                            <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                        </svg>
+                        <p class="pt-2 text-white fs-3">{{ joboffer.city }}</p>
+                    </div>
+
+                    <p class="pt-2 text-white fs-3">{{ joboffer.contract.type }}</p>
+
+                </div>
+
+                {% if app.user and not is_granted('ROLE_COMPANY') %}
+                    <a href="#be-apply-form" class="fs-5 be-apply-button ">Postuler</a>
+                {% endif %}
+
+                <div class=" be-card-joboffer position-absolute d-none d-sm-none d-md-none d-lg-block ">
+                    <div class="fs-5 fw-bold be-cardText-jobofferCompany ">{{ joboffer.company.name }}</div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="d-none d-lg-block container-fluid my-5">
-        <div class="row justify-content-around">
-            <img src= "{{ asset('build/images/GroupWork2.jpg') }}" class="w-25 p-0 be-pictureStyle " alt="Groupe1">
-            <img src="{{ asset('build/images/GroupWork4.jpg') }}" class="w-25 p-0 be-pictureStyle " alt="Groupe2">
-            <img src="{{ asset('build/images/GroupWork.jpg') }}" class="w-25 p-0 be-pictureStyle " alt="Groupe3">
+
+        <div class="d-none d-lg-block container-fluid py-5">
+            <div class="row justify-content-around">
+                <img src= "{{ asset('build/images/GroupWork2.jpg') }}" class="w-25 p-0 be-pictureStyle " alt="Groupe1">
+
+                <img src="{{ asset('build/images/GroupWork4.jpg') }}" class="w-25 p-0 be-pictureStyle " alt="Groupe2">
+
+                <img src="{{ asset('build/images/GroupWork.jpg') }}" class="w-25 p-0 be-pictureStyle " alt="Groupe3">
+            </div>
         </div>
-    </div>
 
-    <div class="container-fluid my-5">
-
-        <div class="d-flex justify-content-end">
-
+        <div class="container-fluid py-5">
+            <h5 class="text-black fs-3 pb-5">{{ joboffer.company.name }} recherche:</h5>
+            {{ joboffer.description | raw }}
         </div>
-        <h5 class="text-black fs-3">{{ joboffer.company.name }} recherche:</h5>
-        {{ joboffer.description | raw }}
-    </div>
+    </section>
 
     {% if not app.user %}
         <div class="text-center mb-4">

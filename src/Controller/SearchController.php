@@ -98,8 +98,9 @@ class SearchController extends AbstractController
 
 
     #[Route('/delete/{id}', name: 'app_search_delete', methods: ['GET','POST'])]
-    public function delete(Search $search, User $user): Response
+    public function delete(Search $search): Response
     {
+        $user = $this->getUser();
         if ($this->searchService->hasSearch($search, $user)) {
             $this->searchService->removeSearch($search);
             $this->manager->flush();
@@ -110,10 +111,9 @@ class SearchController extends AbstractController
 
 
     #[Route('/ma-recherche/{id}', name: 'app_joboffer_Mysearch', methods: ['GET', 'POST'])]
-    public function mySearch(Request $request): Response
+    public function mySearch(int $id): Response
     {
-        $searchId = $request->request->get('searchId');
-        $search = $this->searchRepository->find($searchId);
+        $search = $this->searchRepository->find($id);
         $data = new FilterData();
 
         if (!$search) {
