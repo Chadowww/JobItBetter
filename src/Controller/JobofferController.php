@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Data\FilterData;
 use App\Services\AlertService;
+use App\Services\ApiService;
 use App\Services\JobOfferService;
 use App\Services\FilterService;
 use App\Entity\{Joboffer, User};
@@ -85,9 +86,12 @@ class JobofferController extends AbstractController
 
 
     #[Route('/show/{id}', name: 'app_joboffer_show', methods: ['GET', 'POST'])]
-    public function show(Request $request, Joboffer $joboffer): Response
+    public function show(Request $request, Joboffer $joboffer, ApiService $api): Response
     {
         $user = $this->getUser();
+
+        $img = $api->getImage($joboffer->getCity());
+        $img = $img['photos'][random_int(0, 3)]['src']['medium'];
 
         $form = null;
         if ($user !== null) {
@@ -113,6 +117,7 @@ class JobofferController extends AbstractController
         return $this->render('joboffer/show.html.twig', [
             'joboffer' => $joboffer,
             'form' => $form,
+            'img' => $img,
         ]);
     }
 
