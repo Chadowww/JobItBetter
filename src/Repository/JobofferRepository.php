@@ -183,11 +183,11 @@ class JobofferRepository extends ServiceEntityRepository
 
     public function getSalaryByJob(): array
     {
-        $query = $this->createQueryBuilder('jo')
+        return $this->createQueryBuilder('jo')
+            ->select('j.name', 'MIN(jo.salaryMin) as min', 'MAX(jo.salaryMax) as max')
             ->join('jo.job', 'j')
             ->groupBy('j.id')
             ->getQuery()
             ->getResult();
-        return $query;
     }
 }
