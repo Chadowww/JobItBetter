@@ -12,9 +12,32 @@ class JobofferFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        for ($i = 0; $i < 200; $i++) {
+        $titresOffresEmploi = [
+            "Développeur PHP/Symfony",
+            "Développeur Front-End React",
+            "Tech Lead Symfony",
+            "Ingénieur DevOps",
+            "Analyste en cybersécurité",
+            "Chef de projet IT",
+            "Développeur Java Senior",
+            "Designer d'expérience utilisateur (UX)",
+            "Administrateur de bases de données",
+            "Ingénieur en intelligence artificielle",
+            "Architecte Cloud",
+            "Analyste de données",
+            "Gestionnaire de projet Agile/Scrum",
+            "Ingénieur réseau",
+            "Spécialiste en automatisation des tests",
+            "Administrateur système Linux",
+            "Analyste fonctionnel",
+            "Ingénieur QA (Assurance qualité)",
+            "Ingénieur en télécommunications",
+            "Analyste en business intelligence"
+        ];
+
+        for ($i = 0; $i < 1000; $i++) {
             $joboffer = new Joboffer();
-            $array = [1,2,3,4,5,6,7,8,9];
+            $array = [0,1,2,3,4,5,6,7,8,9];
             $randJob = array_rand($array);
             $numberJob = $array[$randJob];
             $randCompany = array_rand($array);
@@ -70,7 +93,7 @@ class JobofferFixtures extends Fixture implements DependentFixtureInterface
     <li>Horaires flexibles et possibilité de télétravail.</li>
   </ul>";
             $joboffer
-                ->setTitle($this->getReference('job_' . $numberJob)->getName())
+                ->setTitle($titresOffresEmploi[array_rand($titresOffresEmploi)])
                 ->setDescription($offer)
                 ->setCompany($this->getReference('company_' . $numberCompany))
                 ->setJob($this->getReference('job_' . $numberJob))
