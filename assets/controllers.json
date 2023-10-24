@@ -25,6 +25,12 @@
                 }
             }
         },
+        "@symfony/ux-react": {
+            "react": {
+                "enabled": true,
+                "fetch": "eager"
+            }
+        },
         "@symfony/ux-typed": {
             "typed": {
                 "enabled": true,

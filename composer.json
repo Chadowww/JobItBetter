@@ -48,6 +48,7 @@
         "symfony/ux-autocomplete": "^2.9",
         "symfony/ux-chartjs": "^2.12",
         "symfony/ux-live-component": "^2.12",
+        "symfony/ux-react": "^2.12",
         "symfony/ux-twig-component": "^2.9",
         "symfony/ux-typed": "^2.10",
         "symfony/validator": "6.3.*",
