@@ -19,6 +19,9 @@ import './js/js-form-validator.min.js'
 import './js/validator.js';
 import 'chart.js/dist/Chart.min.js';
 
+// import for react
+import { registerReactControllerComponents } from '@symfony/ux-react';
+registerReactControllerComponents(require.context('./react/controllers', true, /\.(j|t)sx?$/));
 // this "modifies" the jquery module: adding behavior to it
 // the bootstrap module doesn't export/return anything
 require('bootstrap');

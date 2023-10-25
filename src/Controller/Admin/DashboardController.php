@@ -43,13 +43,35 @@ class DashboardController extends AbstractDashboardController
         return $this->redirect($url);
     }
     #[Route('/admin/stats', name: 'app_admin_stats')]
-    public function stats(ChartService $chart): Response
-    {
+    public function stats(
+        ChartService $chart,
+        CategoryRepository $categoryRepository,
+        TechnologyRepository $technologyRepository
+    ): Response {
+
+        $categories = [];
+        $technologies = [];
+
+        foreach ($categoryRepository->findAll() as $category) {
+            $categories[] = [
+                'id' => $category->getId(),
+                'name' => $category->getName(),
+            ];
+        }
+        foreach ($technologyRepository->findAll() as $technology) {
+            $technologies[] = [
+                'id' => $technology->getId(),
+                'name' => $technology->getName(),
+                'category' => $technology->getCategory()->getName(),
+            ];
+        }
         return $this->render('admin/stats.html.twig', [
             'chartResume' => $chart->chartResumes(),
             'chartOffers' => $chart->chartOffers(),
             'chartSalary' => $chart->chartSalary(),
             'chartUsers' => $chart->chartUsers(),
+            'categories' => $categories,
+            'technologies' => $technologies,
         ]);
     }
 
