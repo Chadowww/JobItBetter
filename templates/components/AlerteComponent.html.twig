@@ -1,34 +1,5 @@
 <div{{ attributes }}>
-    <div class="card be-card-alerte" style="width: 100%; min-height: 13.75rem;" >
-        <div class="card-header be-alert fw-bold">
-            Mes Alertes
-        </div>
-        <div class="card-body">
-            {% for alert in this.alert(app.user.id) | slice(0, 5) %}
-                <div id="alert-{{ alert.id }}" class="d-flex w-100 px-3 justify-content-around">
-                        <i  id="eye-{{ alert.id }}"
-                            class="bi {{ alert.getState == true ? 'bi-eye-fill' : 'bi-eye-slash'}}"></i>
-                    <a id="alerte-edit-{{ alert.id }}"
-                        href="{{ path('app_alerte_edit', {'id': alert.id}) }}"
-                       class="{{ alert.getState == true  ? 'fw-bold' : 'fw-fill' }} link-alert text-center"
-                       onclick="readAlert(event)"
-                    >
-                        {{ alert.employer.name }} {{ alert.message }}
-                    </a>
-                    <a id="alerte-delete-{{ alert.id }}"
-                        href="{{ path('app_alerte_delete', {'id': alert.id}) }}"
-                        class="text-danger"
-                        onclick="deleteAlert(event)"
-                    >
-                        <i class="fas fa-trash-alt"></i>
-                    </a>
-
-                </div>
-            {% endfor %}
-
-            <button type="button" class="be-secondary-button m-auto " data-toggle="modal" data-target="#exampleModal">
-                    Créer une alerte
-            </button>
-        </div>
+    <div {{ react_component('Alerte', { 'alertes': this.alert(app.user.id)}) }}>
+        Loading... <i class="fas fa-cog fa-spin fa-3x"></i>
     </div>
 </div>
