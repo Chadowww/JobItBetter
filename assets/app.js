@@ -10,7 +10,6 @@ import './styles/app.scss';
 
 import './js/search_navbar.js';
 import './js/favlist.js';
-import './js/alerte.js';
 import './bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './js/salarySlider.js';
