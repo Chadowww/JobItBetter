@@ -24,13 +24,24 @@ final class AlerteComponent
     public function getAlert(int $applicant): array
     {
 
-        return $this->alert
-            ->createQueryBuilder('a')
-            ->where('a.applicant = :applicant')
-            ->setParameter('applicant', $applicant)
-            ->orderBy('a.id', 'DESC')
-            ->getQuery()
-            ->getResult();
+        $alertes =  $this->alert
+                    ->createQueryBuilder('a')
+                    ->where('a.applicant = :applicant')
+                    ->setParameter('applicant', $applicant)
+                    ->orderBy('a.id', 'DESC')
+                    ->getQuery()
+                    ->getResult();
+        $alertesJson = [];
+        foreach ($alertes as $alerte) {
+            $alertesJson[] = [
+                'id' => $alerte->getId(),
+                'applicant' => $alerte->getApplicant()->getFirstname(),
+                'company' => $alerte->getEmployer()->getName(),
+                'content' => $alerte->getMessage(),
+                'readed' => $alerte->getState(),
+            ];
+        }
+        return $alertesJson;
     }
 
     public function readedAlert(Alert $alert): bool
